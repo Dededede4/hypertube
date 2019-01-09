@@ -3,11 +3,11 @@ all: build run
 build:
 	docker build --tag=hyperteub .
 
-install: build
+install: all
 	docker run --rm --interactive --tty \
-    --volume $PWD:/app \
-    --user $(id -u):$(id -g) \
-    composer install
+	--volume $(PWD)/www:/app \
+	--user $(id -u):$(id -g) \
+	composer install
 
 
 run:
