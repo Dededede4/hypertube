@@ -10,7 +10,8 @@ install: all
 	composer install
 	docker exec hypertueub php /var/www/bin/console doctrine:database:create
 	docker exec hypertueub php /var/www/bin/console doctrine:schema:update --force
-
+	# Just for somes days of dev
+	docker exec hypertueub chmod 666 /tmp/bdd.sqlite
 run:
 	docker run -d --name hypertueub -p 4242:80 -v $(CURDIR)/www:/var/www hyperteub
 	docker exec hypertueub /etc/init.d/php7.3-fpm start
