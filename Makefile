@@ -8,7 +8,8 @@ install: all
 	--volume $(PWD)/www:/app \
 	--user $(id -u):$(id -g) \
 	composer install
-
+	docker exec hypertueub php /var/www/bin/console doctrine:database:create
+	docker exec hypertueub php /var/www/bin/console doctrine:schema:update --force
 
 run:
 	docker run -d --name hypertueub -p 4242:80 -v $(CURDIR)/www:/var/www hyperteub
