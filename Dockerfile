@@ -19,7 +19,12 @@ RUN apt-get install -y \
 	php7.3-xml \
 	php7.3-mbstring \
 	php7.3-zip \
-	php7.3-sqlite
+	php7.3-sqlite \
+	gnupg
+
+# For nodejs 11
+RUN curl -sL https://deb.nodesource.com/setup_11.x | bash -
+RUN apt-get install -y nodejs
 
 
 EXPOSE 80
