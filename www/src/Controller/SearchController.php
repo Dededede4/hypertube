@@ -15,7 +15,23 @@ class SearchController extends AbstractController
      */
     public function searchAction($query, SearchTorrentManager $manager)
     {
-        $value = $manager->search($query);
-        return new JsonResponse($value);
+        $returnValues = [];
+
+        $videos = $manager->search($query);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        foreach ($videos as $video) {
+            $entityManager->merge($video);
+        }
+        $entityManager->flush();
+
+        foreach ($videos as $video) {
+            $selectedValues = [
+                'title' => $video->getTitle(),
+                'uuid' => $video->getUuid()
+            ];
+            $returnValues[] = $selectedValues;
+        }
+        return new JsonResponse($returnValues);
     }
 }

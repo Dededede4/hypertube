@@ -9,12 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Video
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -107,14 +102,10 @@ class Video
     private $subtitle;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Id()
+     * @ORM\Column(type="string", length=255, unique=true)
      */
     private $uuid;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getTitle(): ?string
     {
