@@ -30,7 +30,13 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     
     {% block body %}<div id="root"></div>{% endblock %}
-    {% block javascripts %}{% endblock %}
+    {% block javascripts %}
+    <script src="/static/js/bundle.js"></script>
+ 	<script src="/static/js/main.chunk.js"></script>
+ 	<script src="/static/js/0.chunk.js"></script>
+    {% endblock %}
   </body>
+
 </html>
 
+df7b5d91bfe026cd99659572bca748b1d4b2cf68
