@@ -79,8 +79,9 @@ class SearchTorrentManager
                 {
                     $video->setUuid($domElement->childNodes[2]->nodeValue);
                 } 
-                $videos[] = $video;
+                
             }
+            $videos[] = $video;
         }
         return $videos;
     }

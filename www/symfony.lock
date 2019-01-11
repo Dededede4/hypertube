@@ -86,8 +86,23 @@
     "friendsofsymfony/user-bundle": {
         "version": "v2.1.2"
     },
+    "guzzlehttp/psr7": {
+        "version": "1.5.2"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
+    },
+    "kriswallsmith/buzz": {
+        "version": "0.17",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "0.17",
+            "ref": "89a8c10882c422723d1c7f80a41f7008b17f608c"
+        }
+    },
+    "kslr/transmission-php": {
+        "version": "1.1.2"
     },
     "monolog/monolog": {
         "version": "1.24.0"
@@ -113,6 +128,9 @@
     "psr/container": {
         "version": "1.0.0"
     },
+    "psr/http-message": {
+        "version": "1.0.1"
+    },
     "psr/link": {
         "version": "1.0.0"
     },
@@ -121,6 +139,9 @@
     },
     "psr/simple-cache": {
         "version": "1.0.1"
+    },
+    "ralouphie/getallheaders": {
+        "version": "2.0.5"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
