@@ -1,0 +1,10 @@
+{
+    "english": {
+        "disconnect": "Disconnect",
+        "profile": "Profile"
+    },
+    "francais": {
+        "disconnect": "Déconnection",
+        "profile": "Profil"
+    }
+}
