@@ -59,7 +59,15 @@ class SearchTorrentManager
                 if ($domElement->childNodes[0]->nodeValue == 'Description')
                 {
                     $value['description'] = $domElement->childNodes[2]->nodeValue;
-                }   
+                }
+                else if ($domElement->childNodes[0]->nodeValue == 'AddDate')
+                {
+                    $value['date'] = $domElement->childNodes[2]->nodeValue;
+                }
+                else if ($domElement->childNodes[0]->nodeValue == 'Torrent')
+                {
+                    $value['lien'] = $domElement->childNodes[2]->getAttribute('href');
+                } 
             }
         }
         return $results;
