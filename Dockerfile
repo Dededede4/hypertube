@@ -21,7 +21,8 @@ RUN apt-get install -y \
 	php7.3-zip \
 	php7.3-sqlite \
 	gnupg \
-	ffmpeg libavcodec-extra libav-tools
+	ffmpeg libavcodec-extra libav-tools \
+	rabbitmq-server
 
 # For nodejs 11
 RUN curl -sL https://deb.nodesource.com/setup_11.x | bash -
@@ -45,6 +46,7 @@ RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 WORKDIR /tmp
 RUN curl --silent --show-error https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
+
 
 WORKDIR /var/www
 

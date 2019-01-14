@@ -105,7 +105,12 @@ class Video
      * @ORM\Id()
      * @ORM\Column(type="string", length=255, unique=true)
      */
-    private $uuid;
+    private $btih;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $source;
 
     public function getTitle(): ?string
     {
@@ -311,14 +316,14 @@ class Video
         return $this;
     }
 
-    public function getUuid(): ?string
+    public function getBtih(): ?string
     {
-        return $this->uuid;
+        return $this->btih;
     }
 
-    public function setUuid(string $uuid): self
+    public function setBtih(string $btih): self
     {
-        $this->uuid = $uuid;
+        $this->btih = $btih;
 
         return $this;
     }
@@ -331,6 +336,18 @@ class Video
     public function setNbLeecher(?int $nbLeecher): self
     {
         $this->nbLeecher = $nbLeecher;
+
+        return $this;
+    }
+
+    public function getSource(): ?int
+    {
+        return $this->source;
+    }
+
+    public function setSource(int $source): self
+    {
+        $this->source = $source;
 
         return $this;
     }

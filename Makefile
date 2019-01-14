@@ -13,9 +13,9 @@ install: all
 	# Just for somes days of dev
 	docker exec hypertueub chmod 666 /tmp/bdd.sqlite
 run:
-	docker run -d --name hypertueub -p 4242:80 -p 9091:9091 -v $(CURDIR)/www:/var/www hyperteub
+	docker run -d --name hypertueub -p 4242:80 -v $(CURDIR)/www:/var/www hyperteub
 	docker exec hypertueub /etc/init.d/php7.3-fpm start
-	docker exec hypertueub service transmission-daemon start
+	docker exec hypertueub service rabbitmq-server start
 	docker exec hypertueub bin/console doctrine:migrations:migrate
 
 clean:

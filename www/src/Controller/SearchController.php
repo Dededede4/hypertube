@@ -28,7 +28,7 @@ class SearchController extends AbstractController
         foreach ($videos as $video) {
             $selectedValues = [
                 'title' => $video->getTitle(),
-                'uuid' => $video->getUuid()
+                'btih' => $video->getBtih(),
             ];
             $returnValues[] = $selectedValues;
         }
