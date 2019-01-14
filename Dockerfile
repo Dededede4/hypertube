@@ -20,6 +20,7 @@ RUN apt-get install -y \
 	php7.3-mbstring \
 	php7.3-zip \
 	php7.3-sqlite \
+	php7.3-bcmath \
 	gnupg \
 	ffmpeg libavcodec-extra libav-tools \
 	rabbitmq-server

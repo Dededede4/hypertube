@@ -6,7 +6,9 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "friendsofsymfony/user-bundle": "~2.0",
+        "kriswallsmith/buzz": "0.16.1",
         "kslr/transmission-php": "^1.1",
+        "php-amqplib/php-amqplib": "^2.8",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "4.2.*",
         "symfony/console": "4.2.*",
@@ -25,8 +27,7 @@
         "symfony/twig-bundle": "4.2.*",
         "symfony/validator": "4.2.*",
         "symfony/web-link": "4.2.*",
-        "symfony/yaml": "4.2.*",
-        "kriswallsmith/buzz": "0.16.1"
+        "symfony/yaml": "4.2.*"
     },
     "require-dev": {
         "symfony/debug-pack": "*",

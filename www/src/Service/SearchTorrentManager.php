@@ -96,7 +96,9 @@ class SearchTorrentManager
 
         $videos = [];
         foreach ($datas as $data) {
-            dump($data['description']);
+            if(empty($data['btih']))
+                continue;
+
             $video = new Video();
             if (isset($data['description']) && is_array($data['description'])){
                 $data['description'] = $data['description'][0];

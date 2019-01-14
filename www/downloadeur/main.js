@@ -1,19 +1,35 @@
+#!/usr/bin/env node
+
 var torrentStream = require('torrent-stream');
-
-var engine = torrentStream('magnet:?xt=urn:btih:218102874f75f0132728331519a2e6e469d01cf9&dn=Scary+Movie+%5BQuadrilogy%5D+720p+mkv+-+YIFY&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fzer0day.ch%3A1337&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969');
-var Transcoder = require('stream-transcoder');
-
 var fs = require("fs");
-var myFile = fs.createWriteStream("video.mp4");
-engine.on('ready', function() {
-	var i = 0;
-		engine.files.forEach(function(file) {
-				i++;
-				if (i > 1)
-					return;
-					console.log('filename:', file.name);
-					var stream = file.createReadStream();
+var Transcoder = require('stream-transcoder');
+var amqp = require('amqplib/callback_api');
 
+amqp.connect('amqp://localhost', function(err, conn) {
+  conn.createChannel(function(err, ch) {
+    var q = 'torrent-to-download';
+
+    ch.assertQueue(q, {durable: true});
+    console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
+    ch.consume(q, function(msg) {
+      console.log(" [x] Received %s", msg.content.toString());
+
+      var btih = msg.content.toString();
+      var engine = torrentStream(fs.readFileSync('/var/www/public/download/torrent/'+btih+'.torrent'));
+      engine.on('ready', function() {
+		var i = 0;
+		engine.files.forEach(function(file) {
+			console.log('"'+file.name.split('.').pop()+'"');
+				if (file.name.split('.').pop() != 'mp4')
+					return ;
+				i++;
+				console.log('filename:', file.name);
+				if (i > 1)
+				{
+					return;
+				}
+				console.log('ogogog');
+					var stream = file.createReadStream();
 						new Transcoder(stream)
 	  				    .maxSize(320, 240)
 					    .videoCodec('h264')
@@ -27,6 +43,9 @@ engine.on('ready', function() {
 					    .on('finish', function() {
 					    	next();
 					    })
-					    .stream().pipe(myFile);
- 	});
+					    .stream().pipe(fs.createWriteStream('/var/www/public/download/stream/'+btih+'.mp4'));
+	});
+});
+    }, {noAck: true});
+  });
 });
