@@ -51,6 +51,7 @@ class SearchTorrentManager
             $video = new Video();
             $video->setTitle($value['name'])
             ->setSource(2);
+            
 
             $html = file_get_contents('http://www.legittorrents.info/'.$value['url']);
             
@@ -72,16 +73,13 @@ class SearchTorrentManager
                     // Todo
                     // $value['date'] = $domElement->childNodes[2]->nodeValue;
                 }
-                else if ($domElement->childNodes[0]->nodeValue == 'Torrent')
-                {
-                    $video->setTorrentUrl($domElement->childNodes[2]->getAttribute('href'));
-                } 
                 else if ($domElement->childNodes[0]->nodeValue == 'Info Hash')
                 {
                     $video->setBtih($domElement->childNodes[2]->nodeValue);
                 } 
                 
             }
+            $video->setTorrentUrl('http://www.legittorrents.info/download.php?id='.$video->getBtih().'&f=osef.torrent');
             $videos[] = $video;
         }
         return $videos;
