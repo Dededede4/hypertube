@@ -1,10 +1,12 @@
 {
-    "english": {
-        "disconnect": "Disconnect",
-        "profile": "Profile"
-    },
-    "francais": {
-        "disconnect": "Déconnection",
-        "profile": "Profil"
-    }
+  "english": {
+    "disconnect": "Disconnect",
+    "profile": "Profile",
+    "search": "Search ..."
+  },
+  "francais": {
+    "disconnect": "Déconnection",
+    "profile": "Profil",
+    "search": "Rechercher ..."
+  }
 }
