@@ -10,7 +10,7 @@ const searchBarStyle = {
 
 const noData = 'https://bedekodzic.pl/wp-content/uploads/2018/05/%EF%BC%9F.png';
 
-const movies = [
+const moviesData = [
   {
     id: '122325435',
     title: 'Matrix',
@@ -76,48 +76,69 @@ const movies = [
   },
 ];
 
-const wraper = {
-  marginTop: '4em',
-  display: 'grid',
-  gridTemplateColumns: 'repeat(3, 1fr)',
-  gridGap: '10px',
-};
-
-const HomePage = ({ history }) => (
-  <div>
-    <input
-      style={searchBarStyle}
-      className="input is-large "
-      type="text"
-      placeholder={langue.translate('search')}
-    />
-    <div style={wraper}>
-      {movies.map(movie => (
-        <div
-          class="card"
-          style={{ cursor: 'pointer' }}
-          onClick={() => history.push(`/movie/${movie.id}`)}
-        >
-          <div class="card-image">
-            <figure class="image is-4by3">
-              <img src={movie.pic || noData} alt="Placeholder image" />
-            </figure>
-          </div>
-          <div class="card-content">
-            <div class="media">
-              <div class="media-content">
-                <p class="title is-4">{movie.title}</p>
-                <p class="subtitle is-6">{movie.date}</p>
-              </div>
-            </div>
-            <div class="content">
-              <Stars rate={movie.rate} />
-            </div>
-          </div>
+const MovieCard = withRouter(({ history, movie }) => (
+  <div
+    className="card"
+    style={{ cursor: 'pointer' }}
+    onClick={() => history.push(`/movie/${movie.id}`)}
+  >
+    <div className="card-image">
+      <figure className="image is-4by3">
+        <img src={movie.pic || noData} alt="Placeholder" />
+      </figure>
+    </div>
+    <div className="card-content">
+      <div className="media">
+        <div className="media-content">
+          <p className="title is-4">{movie.title}</p>
+          <p className="subtitle is-6">{movie.date}</p>
         </div>
-      ))}
+      </div>
+      <div className="content">
+        <Stars rate={movie.rate} />
+      </div>
     </div>
   </div>
-);
+));
+
+class HomePage extends React.Component {
+  state = { movies: [] };
+
+  scrollcb = () => {
+    if (window.scrollY + window.innerHeight + 40 >= document.getElementById('root').offsetHeight) {
+      this.state.movies.push(...moviesData);
+      this.setState({ movies: this.state.movies });
+      console.log('Hey', window.scrollY, moviesData);
+    }
+  };
+
+  componentDidMount() {
+    this.setState({ movies: moviesData.slice(0) });
+    window.addEventListener('scroll', this.scrollcb);
+  }
+
+  componentWillUnmount() {
+    window.grid.removeEventListener('scroll', this.scrollcb);
+  }
+
+  render() {
+    return (
+      <div>
+        <input
+          style={searchBarStyle}
+          className="input is-large "
+          type="text"
+          placeholder={langue.translate('search')}
+        />
+        <div ref={elem => (this.grid = elem)} className="Movies-grid">
+          {console.log(this.state.movies)}
+          {this.state.movies.map((movie, index) => (
+            <MovieCard key={index} movie={movie} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+}
 
 export default withRouter(HomePage);

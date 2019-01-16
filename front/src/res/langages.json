@@ -2,11 +2,23 @@
   "english": {
     "disconnect": "Disconnect",
     "profile": "Profile",
-    "search": "Search ..."
+    "search": "Search ...",
+    "productor": "Productor",
+    "actor": "Actor",
+    "date": "Date",
+    "duration": "Duration",
+    "description": "Description",
+    "rate": "Rate"
   },
   "francais": {
     "disconnect": "Déconnection",
     "profile": "Profil",
-    "search": "Rechercher ..."
+    "search": "Rechercher ...",
+    "productor": "Producteur",
+    "actor": "Acteur",
+    "date": "Date",
+    "duration": "Durée",
+    "description": "Description",
+    "rate": "Note"
   }
 }

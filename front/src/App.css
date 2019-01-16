@@ -30,6 +30,18 @@
   }
 }
 
+.Movies-grid {
+  margin-top: 4em;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .Movies-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
 .checked {
   color: orange;
 }

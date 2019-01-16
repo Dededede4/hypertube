@@ -30,7 +30,7 @@ const NavBar = ({ onLangChange, clicked, isClicked, history }) => (
           onClick={() => history.push('/')}
         >
           <a className="navbar-item">
-            <i class="fas fa-home" />
+            <i className="fas fa-home" />
           </a>
         </div>
         <div className="navbar-item">

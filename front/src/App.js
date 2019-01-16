@@ -1,20 +1,11 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  withRouter,
-  Route,
-  Link,
-  Switch,
-  Redirect,
-} from 'react-router-dom';
-import logo from './logo.svg';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import NavBar from './components/navbar.js';
 import langue from './modules/langage';
 import Home from './pages/home';
 import Movie from './pages/movie';
 
-const Index = () => <h1>INDEX</h1>;
 const About = () => <h1>About</h1>;
 const Users = () => <h1>Users</h1>;
 
@@ -32,8 +23,8 @@ class App extends React.Component {
       <Router>
         <div>
           <NavBar onLangChange={this.changeLangage} />
-          <section class="section">
-            <div class="container">
+          <section className="section">
+            <div className="container">
               <Switch>
                 <Route path="/" exact component={Home} />
                 <Route path="/movie/:id" component={Movie} />
