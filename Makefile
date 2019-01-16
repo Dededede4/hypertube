@@ -10,6 +10,7 @@ install:
 	--user $(id -u):$(id -g) \
 	composer install --ignore-platform-reqs # php7.3-bcmath no detected ?
 	make run
+	docker exec hypertueub cd /var/www/front / ; npm i ; npm run build ; mv /var/www/front/build /var/www/public/react
 	docker exec hypertueub php /var/www/bin/console doctrine:database:create
 	docker exec hypertueub php /var/www/bin/console doctrine:schema:update --force
 	# Just for somes days of dev
