@@ -16,7 +16,8 @@ function write(fileName, data) {
   });
 }
 
-const replace_soure = (_, p1) => `src="{{ asset('${p1}')}}"`;
+const replace_src = (_, p1) => `src="{{ asset('react/${p1}')}}"`;
+const replace_linkhref = (_, p1) => `link href="{{ asset('react/${p1}')}}"`;
 
 const main = async () => {
   if (process.argv.length <= 2)
@@ -39,7 +40,9 @@ const main = async () => {
     .replace(`<div id="root">`, `{% block body %}<div id="root"></div>{% endblock %}`)
     .replace(`</div><script>`, `<script>{% block javascripts %}`)
     .replace(`</script></body>`, `</script>{% endblock %}\n</body>`)
-    .replace(/src="(.*?)"/g, replace_soure);
+    .replace(/src="(.*?)"/g, replace_src)
+    .replace(/link href="(.*?)"/g, replace_linkhref)
+    ;
   if (!dest) return console.log(file);
   const res = await write(dest, file).catch(e => true);
   if (!!res) console.error('Failure');
