@@ -21,7 +21,7 @@ class SearchTorrentManager
 
     public function search($query)
     {
-        return array_merge($this->searchArchiveOrg($query), $this->searchLegitTorrent($query));
+        return array_merge($this->searchArchiveOrg($query), $this->searchLegitTorrent($query), $this->searchYTSam($query));
     }
 
     public function searchLegitTorrent($query)
@@ -91,6 +91,7 @@ class SearchTorrentManager
         $datas = json_decode(file_get_contents($url), true);
         // Check if result is empty
         $datas = $datas['response']['docs'];
+        dump($datas);
 
         $videos = [];
         foreach ($datas as $data) {
@@ -109,9 +110,7 @@ class SearchTorrentManager
                 ->setSource(1)
                 ;
             $videos[] = $video;
-        }
-
-        
+        }    
         return $videos;
     }
 
@@ -119,31 +118,35 @@ class SearchTorrentManager
 
     public function searchYTSam($query)
     {
-        $url = 'https://yts.am/search-movies'.urlencode($query);
+        $url = 'https://yts.am/api/v2/list_movies.json?query_term='.urlencode($query);
         $datas = json_decode(file_get_contents($url), true);
         // Check if result is empty
-        $datas = $datas['response']['docs'];
-
+        dump($datas['data']['movies']);
+        die;
         $videos = [];
         foreach ($datas as $data) {
-            if(empty($data['btih']))
-                continue;
-
             $video = new Video();
-            if (isset($data['description']) && is_array($data['description'])){
+            if (isset($data['description']) && is_array($data['description'])
+            {
                 $data['description'] = $data['description'][0];
             }
+            if (isset($data['torrents']) && is_array($data['torrents'])
+            {
+                $data['url'] = $data['torrents'][0];
+            }
             $video
+                ->setTime($data['runtime'])
                 ->setTitle($data['title'])
-                ->setTorrentUrl('https://archive.org/download/'.$data['identifier'].'/'.$data['identifier'].'_archive.torrent')
-                ->setDescription($data['description'] ?? '')
+                ->setDescription($data['description_full'] ?? '')
                 ->setBtih($data['btih'])
+                ->setyear($data['year'])
+                ->setimage($data['medium_cover_image'])
                 ->setSource(1)
+                
                 ;
             $videos[] = $video;
         }
-
-        
         return $videos;
     }
+
 }
