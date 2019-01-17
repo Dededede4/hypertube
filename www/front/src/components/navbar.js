@@ -47,20 +47,14 @@ const NavBar = ({ onLangChange, clicked, isClicked, history }) => (
 
       <div className="navbar-end">
         <div className="navbar-item">
-          <div className="field is-grouped">
-            <p className="control">
-              <a className="bd-tw-button button">
-                <span>
+              <div class="buttons"></div>
+              <a className="bd-tw-button button" onClick={() => history.push('/profile')}>
                   <span>{langue.translate('profile')}</span>
-                </span>
               </a>
-            </p>
-            <p className="control">
+
               <a className="button is-danger">
                 <span>{langue.translate('disconnect')}</span>
               </a>
-            </p>
-          </div>
         </div>
       </div>
     </div>

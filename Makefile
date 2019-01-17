@@ -23,8 +23,8 @@ run:
 	docker exec hypertueub bin/console doctrine:migrations:migrate
 
 clean:
-	docker kill hypertueub
-	docker rm hypertueub
+	-docker kill hypertueub
+	-docker rm hypertueub
 
 re: clean all
 

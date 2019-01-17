@@ -5,6 +5,8 @@ import NavBar from './components/navbar.js';
 import langue from './modules/langage';
 import Home from './pages/home';
 import Movie from './pages/movie';
+import Movies from './pages/movies';
+import Profile from './pages/profile';
 
 const About = () => <h1>About</h1>;
 const Users = () => <h1>Users</h1>;
@@ -27,9 +29,11 @@ class App extends React.Component {
             <div className="container">
               <Switch>
                 <Route path="/" exact component={Home} />
+                <Route path="/movies/" component={Movies} />
                 <Route path="/movie/:id" component={Movie} />
                 <Route path="/about/" component={About} />
                 <Route path="/users/" component={Users} />
+                <Route path="/profile/" component={Profile} />
               </Switch>
             </div>
           </section>
