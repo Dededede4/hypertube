@@ -118,7 +118,7 @@ class HomePage extends React.Component {
   }
 
   componentWillUnmount() {
-    window.grid.removeEventListener('scroll', this.scrollcb);
+    window.removeEventListener('scroll', this.scrollcb);
   }
 
   render() {
