@@ -114,4 +114,36 @@ class SearchTorrentManager
         
         return $videos;
     }
+
+
+
+    public function searchYTSam($query)
+    {
+        $url = 'https://yts.am/search-movies'.urlencode($query);
+        $datas = json_decode(file_get_contents($url), true);
+        // Check if result is empty
+        $datas = $datas['response']['docs'];
+
+        $videos = [];
+        foreach ($datas as $data) {
+            if(empty($data['btih']))
+                continue;
+
+            $video = new Video();
+            if (isset($data['description']) && is_array($data['description'])){
+                $data['description'] = $data['description'][0];
+            }
+            $video
+                ->setTitle($data['title'])
+                ->setTorrentUrl('https://archive.org/download/'.$data['identifier'].'/'.$data['identifier'].'_archive.torrent')
+                ->setDescription($data['description'] ?? '')
+                ->setBtih($data['btih'])
+                ->setSource(1)
+                ;
+            $videos[] = $video;
+        }
+
+        
+        return $videos;
+    }
 }
