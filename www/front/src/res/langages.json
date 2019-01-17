@@ -8,8 +8,7 @@
     "date": "Date",
     "duration": "Duration",
     "description": "Description",
-    "rate": "Rate",
-    "my profile": "My profile"
+    "rate": "Rate"
   },
   "francais": {
     "disconnect": "Déconnection",
@@ -20,7 +19,6 @@
     "date": "Date",
     "duration": "Durée",
     "description": "Description",
-    "rate": "Note",
-    "my profile": "Mon profil"
+    "rate": "Note"
   }
 }
