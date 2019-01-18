@@ -8,17 +8,6 @@ use App\Entity\Video;
 
 class SearchTorrentManager
 {
-    /*public function __construct(MessageGenerator $messageGenerator, \Swift_Mailer $mailer)
-    {
-        $this->messageGenerator = $messageGenerator;
-        $this->mailer = $mailer;
-    }*/
-
-    public function __construct()
-    {
-
-    }
-
     public function search($query)
     {
         return array_merge($this->searchArchiveOrg($query), $this->searchLegitTorrent($query), $this->searchYTSam($query));
@@ -126,11 +115,11 @@ class SearchTorrentManager
         $videos = [];
         foreach ($datas as $data) {
             $video = new Video();
-            if (isset($data['description']) && is_array($data['description'])
+            if (isset($data['description']) && is_array($data['description']))
             {
                 $data['description'] = $data['description'][0];
             }
-            if (isset($data['torrents']) && is_array($data['torrents'])
+            if (isset($data['torrents']) && is_array($data['torrents']))
             {
                 $data['url'] = $data['torrents'][0];
             }
