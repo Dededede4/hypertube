@@ -80,7 +80,7 @@ class SearchTorrentManager
         $datas = json_decode(file_get_contents($url), true);
         // Check if result is empty
         $datas = $datas['response']['docs'];
-        dump($datas);
+        // dump($datas); // a commenter apres
 
         $videos = [];
         foreach ($datas as $data) {
@@ -110,9 +110,11 @@ class SearchTorrentManager
         $url = 'https://yts.am/api/v2/list_movies.json?query_term='.urlencode($query);
         $datas = json_decode(file_get_contents($url), true);
         // Check if result is empty
-        dump($datas['data']['movies']);
+        // $datas = ($datas['data']['movies']); //problemme si pas de movies
+        dump($datas); // a commenter apes
         die;
         $videos = [];
+
         foreach ($datas as $data) {
             $video = new Video();
             if (isset($data['description']) && is_array($data['description']))
@@ -124,17 +126,16 @@ class SearchTorrentManager
                 $data['url'] = $data['torrents'][0];
             }
             $video
-                ->setTime($data['runtime'])
                 ->setTitle($data['title'])
                 ->setDescription($data['description_full'] ?? '')
-                ->setBtih($data['btih'])
-                ->setyear($data['year'])
-                ->setimage($data['medium_cover_image'])
-                ->setSource(1)
-                
+                ->setProductionDate(\DateTime::createFromFormat('Y-m-d H:i:s', $data['year'].'-01-01 00:00:00'))
+                ->setDuration($data['runtime'])
+                ->pictureUrl($data['medium_cover_image'])
+                ->setSource(1)                
                 ;
             $videos[] = $video;
         }
+        dump($video);
         return $videos;
     }
 
