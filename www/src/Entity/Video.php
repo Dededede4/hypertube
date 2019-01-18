@@ -9,8 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Video
 {
-
-
     /**
      * @ORM\Column(type="string", length=255)
      */
@@ -350,5 +348,19 @@ class Video
         $this->source = $source;
 
         return $this;
+    }
+
+    public function getMagnet()
+    {
+        $uri = 'magnet:?xt=urn:btih:'.$this->getBtih();
+        if ($this->source == 1) // Archive.org
+        {
+            $uri .= '&tr=http%3a%2f%2fbt1.archive.org%3a6969%2fannounce&tr=http%3a%2f%2fbt2.archive.org%3a6969%2fannounce';
+        }
+        if ($this->source == 2) // Legittorrent
+        {
+            $uri .= '&tr=udp%3a%2f%2ftracker.coppersurfer.tk%3a6969&tr=udp%3a%2f%2ftracker.leechers-paradise.org%3a6969&tr=udp%3a%2f%2ftracker.openbittorrent.com%3a80&tr=udp%3a%2f%2fopen.demonii.com%3a1337';
+        }
+        return $uri;
     }
 }

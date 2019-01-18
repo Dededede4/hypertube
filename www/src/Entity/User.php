@@ -28,4 +28,38 @@ class User extends BaseUser
     {
         return $this->id;
     }
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $facebookId;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true, name="intra42_id")
+     */
+    private $intra42Id;
+
+    public function getFacebookId(): ?int
+    {
+        return $this->facebookId;
+    }
+
+    public function setFacebookId(?int $facebookId): self
+    {
+        $this->facebookId = $facebookId;
+
+        return $this;
+    }
+
+    public function getIntra42Id(): ?int
+    {
+        return $this->intra42Id;
+    }
+
+    public function setIntra42Id(?int $intra42Id): self
+    {
+        $this->intra42Id = $intra42Id;
+
+        return $this;
+    }
 }
