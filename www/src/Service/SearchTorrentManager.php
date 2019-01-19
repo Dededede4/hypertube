@@ -10,7 +10,7 @@ class SearchTorrentManager
 {
     public function search($query)
     {
-        return array_merge($this->searchArchiveOrg($query), $this->searchLegitTorrent($query), $this->searchYTSam($query));
+        return array_merge($this->searchYTSam($query));
     }
 
     public function searchLegitTorrent($query)
@@ -109,10 +109,15 @@ class SearchTorrentManager
     {
         $url = 'https://yts.am/api/v2/list_movies.json?query_term='.urlencode($query);
         $datas = json_decode(file_get_contents($url), true);
-        // Check if result is empty
-        // $datas = ($datas['data']['movies']); //problemme si pas de movies
+
+        if (!is_array($datas['data']))
+            return [];
+        if (!isset($datas['data']['movies']) || !is_array($datas['data']['movies']))
+            return [];
+
+        $datas = ($datas['data']['movies']); //problemme si pas de movies
         dump($datas); // a commenter apes
-        die;
+        // die;
         $videos = [];
 
         foreach ($datas as $data) {
@@ -125,18 +130,40 @@ class SearchTorrentManager
             {
                 $data['url'] = $data['torrents'][0];
             }
+
+            if($torrent = $this->searchYTSam_searchQuality($data['torrents'], '1080p'))
+            {
+                $video->setTorrentUrl($torrent['url']);
+                $video->setBtih($torrent['hash']);
+            }
+            elseif ($torrent = $this->searchYTSam_searchQuality($data['torrents'], '720p'))
+            {
+                $video->setTorrentUrl($torrent['url']);
+                $video->setBtih($torrent['hash']);
+            }
             $video
                 ->setTitle($data['title'])
                 ->setDescription($data['description_full'] ?? '')
                 ->setProductionDate(\DateTime::createFromFormat('Y-m-d H:i:s', $data['year'].'-01-01 00:00:00'))
                 ->setDuration($data['runtime'])
-                ->pictureUrl($data['medium_cover_image'])
-                ->setSource(1)                
+                ->setPictureUrl($data['medium_cover_image'])
+                ->setSource(1)
                 ;
             $videos[] = $video;
         }
         dump($video);
         return $videos;
+    }
+
+    public function searchYTSam_searchQuality($tab, $quality)
+    {
+        foreach ($tab as $line) {
+            if($line['quality'] === $quality)
+            {
+                return $line;
+            }
+        }
+        return null;
     }
 
 }
