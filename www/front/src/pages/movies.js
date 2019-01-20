@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import langue from '../modules/langage';
+import ControlledInput from '../containers/controlledInput';
 import Stars from '../components/stars';
 
 const searchBarStyle = {
@@ -124,11 +125,12 @@ class HomePage extends React.Component {
   render() {
     return (
       <div>
-        <input
+        <ControlledInput
           style={searchBarStyle}
           className="input is-large "
           type="text"
           placeholder={langue.translate('search')}
+          onChange={e => console.log(e)}
         />
         <div ref={elem => (this.grid = elem)} className="Movies-grid">
           {console.log(this.state.movies)}
