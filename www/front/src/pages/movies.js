@@ -14,72 +14,6 @@ const titleStyle = { marginTop: '2.5em', textAlign: 'center' };
 
 const noData = 'https://bedekodzic.pl/wp-content/uploads/2018/05/%EF%BC%9F.png';
 
-const moviesData = [
-  {
-    id: '122325435',
-    title: 'Matrix',
-    pic: null,
-    rate: 5,
-    date: 2000,
-  },
-  {
-    id: '654647575',
-    title: 'Guilhem',
-    pic: null,
-    rate: 5,
-    date: 1887,
-  },
-  {
-    id: '1232324324',
-    title: 'mprevot',
-    pic: null,
-    rate: 0,
-    date: 2000,
-  },
-  {
-    id: '9879799',
-    title: 'Matr ix',
-    pic: null,
-    rate: 3,
-    date: 2000,
-  },
-  {
-    id: '6546546',
-    title: 'Matrdsadsadix',
-    pic: null,
-    rate: 2,
-    date: 2000,
-  },
-  {
-    id: '5',
-    title: 'Maaaatrix',
-    pic: null,
-    rate: 1,
-    date: 2023,
-  },
-  {
-    id: '5435435',
-    title: 'hypertube',
-    pic: null,
-    rate: 5,
-    date: 2014,
-  },
-  {
-    id: '7657',
-    title: '42',
-    pic: null,
-    rate: 5,
-    date: 2013,
-  },
-  {
-    id: '32424',
-    title: 'Matrix',
-    pic: null,
-    rate: 0,
-    date: 200,
-  },
-];
-
 const MovieCard = withRouter(({ history, movie }) => (
   <div
     className="card"
@@ -110,6 +44,7 @@ const format_movies = ({ large_cover_image, title, year, rating }) => ({
   pic: large_cover_image,
   rate: rating / 2,
   date: year,
+  id: 'mdr',
 });
 
 class HomePage extends React.Component {
@@ -136,7 +71,7 @@ class HomePage extends React.Component {
         this.state.movies.push(...data.movies.map(format_movies));
         this.setState({ movies: this.state.movies, page: this.state.page + 1 });
       }
-      console.log('Hey', window.scrollY, moviesData);
+      console.log('Hey', window.scrollY);
       this.lock = false;
     }
   };
