@@ -5,10 +5,11 @@ namespace App\Entity;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * @ORM\Entity
  * @ORM\Table(name="user")
+ * @ORM\HasLifecycleCallbacks()
  */
 class User extends BaseUser
 {
@@ -67,6 +68,116 @@ class User extends BaseUser
      */
     private $intra42Id;
 
+    /**
+     * @Assert\File(maxSize="2048k")
+     * @Assert\Image(mimeTypesMessage="Please upload a valid image.")
+     */
+    protected $profilePictureFile;
+
+    // for temporary storage
+    private $tempProfilePicturePath;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    protected $profilePicturePath;
+
+    /**
+     * Sets the file used for profile picture uploads
+     * 
+     * @param UploadedFile $file
+     * @return object
+     */
+    public function setProfilePictureFile(UploadedFile $file = null) {
+        // set the value of the holder
+        $this->profilePictureFile       =   $file;
+         // check if we have an old image path
+        if (isset($this->profilePicturePath)) {
+            // store the old name to delete after the update
+            $this->tempProfilePicturePath = $this->profilePicturePath;
+            $this->profilePicturePath = null;
+        } else {
+            $this->profilePicturePath = 'initial';
+        }
+
+        return $this;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preUploadProfilePicture() {
+        if (null !== $this->getProfilePictureFile()) {
+            // a file was uploaded
+            // generate a unique filename
+            $filename = uniqid();
+            $this->setProfilePicturePath($filename.'.'.$this->getProfilePictureFile()->guessExtension());
+        }
+    }
+
+    /**
+     * Get root directory for file uploads
+     * 
+     * @return string
+     */
+    protected function getUploadRootDir() {
+        // the absolute directory path where uploaded
+        // documents should be saved
+        return (__DIR__.'/../../public/avatars');
+    }
+
+
+
+    /**
+     * @ORM\PostPersist()
+     * @ORM\PostUpdate()
+     * 
+     * Upload the profile picture
+     * 
+     * @return mixed
+     */
+    public function uploadProfilePicture() {
+        // check there is a profile pic to upload
+        if ($this->getProfilePictureFile() === null) {
+            return;
+        }
+        // if there is an error when moving the file, an exception will
+        // be automatically thrown by move(). This will properly prevent
+        // the entity from being persisted to the database on error
+        $this->getProfilePictureFile()->move($this->getUploadRootDir(), $this->getProfilePicturePath());
+
+        // check if we have an old image
+        if (isset($this->tempProfilePicturePath) && file_exists($this->getUploadRootDir().'/'.$this->tempProfilePicturePath)) {
+            // delete the old image
+            unlink($this->getUploadRootDir().'/'.$this->tempProfilePicturePath);
+            // clear the temp image path
+            $this->tempProfilePicturePath = null;
+        }
+        $this->profilePictureFile = null;
+    }
+
+    /**
+     * @ORM\PostRemove()
+     */
+    public function removeProfilePictureFile()
+    {
+        if ($file = $this->getProfilePictureAbsolutePath() && file_exists($this->getProfilePictureAbsolutePath())) {
+            unlink($file);
+        }
+    }
+
+
+    /**
+     * Get the file used for profile picture uploads
+     * 
+     * @return UploadedFile
+     */
+    public function getProfilePictureFile() {
+
+        return $this->profilePictureFile;
+    }
+
     public function getFacebookId(): ?int
     {
         return $this->facebookId;
@@ -111,6 +222,18 @@ class User extends BaseUser
     public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getProfilePicturePath(): ?string
+    {
+        return $this->profilePicturePath;
+    }
+
+    public function setProfilePicturePath(?string $profilePicturePath): self
+    {
+        $this->profilePicturePath = $profilePicturePath;
 
         return $this;
     }
