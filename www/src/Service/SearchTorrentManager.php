@@ -126,11 +126,6 @@ class SearchTorrentManager
             {
                 $data['description'] = $data['description'][0];
             }
-            if (isset($data['torrents']) && is_array($data['torrents']))
-            {
-                $data['url'] = $data['torrents'][0];
-            }
-
             if($torrent = $this->searchYTSam_searchQuality($data['torrents'], '1080p'))
             {
                 $video->setTorrentUrl($torrent['url']);
