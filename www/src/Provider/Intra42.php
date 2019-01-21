@@ -40,8 +40,6 @@ class Intra42 extends AbstractProvider
     protected function checkResponse(ResponseInterface $response, $data)
     {
         if ($response->getStatusCode() >= 400) {
-        	dump($response);
-        	dump($data);
             return new IdentityProviderException(
                 $response->getReasonPhrase(),
                 $response->getStatusCode(),
