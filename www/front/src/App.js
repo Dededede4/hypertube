@@ -11,6 +11,8 @@ import Profile from './pages/profile';
 const About = () => <h1>About</h1>;
 const Users = () => <h1>Users</h1>;
 
+const Forsansfor = () => <h1>404</h1>;
+
 class App extends React.Component {
   state = {
     langue: langue.lang,
@@ -34,6 +36,7 @@ class App extends React.Component {
                 <Route path="/about/" component={About} />
                 <Route path="/users/" component={Users} />
                 <Route path="/profile/" component={Profile} />
+                <Route component={Forsansfor} />
               </Switch>
             </div>
           </section>

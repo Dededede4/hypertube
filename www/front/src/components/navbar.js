@@ -47,7 +47,7 @@ const NavBar = ({ onLangChange, clicked, isClicked, history }) => (
 
       <div className="navbar-end">
         <div className="navbar-item">
-              <div class="buttons"></div>
+              <div className="buttons"></div>
               <a className="bd-tw-button button" onClick={() => history.push('/profile')}>
                   <span>{langue.translate('profile')}</span>
               </a>
