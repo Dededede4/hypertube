@@ -71,6 +71,8 @@ class OAuthController extends Controller
             $facebookUser = $client->fetchUser();
 
             $user = $this->getDoctrine()->getManager()->getRepository("App\Entity\User")->findOneBy(array('facebookId' => $facebookUser->getId()));
+            dump($facebookUser);
+            die;
 
             if(null == $user)
             {

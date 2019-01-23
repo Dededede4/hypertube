@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -23,6 +25,7 @@ class User extends BaseUser
     public function __construct()
     {
         parent::__construct();
+        $this->comments = new ArrayCollection();
         // your own logic
     }
 
@@ -81,6 +84,11 @@ class User extends BaseUser
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     protected $profilePicturePath;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user", orphanRemoval=true)
+     */
+    private $comments;
 
     /**
      * Sets the file used for profile picture uploads
@@ -234,6 +242,37 @@ class User extends BaseUser
     public function setProfilePicturePath(?string $profilePicturePath): self
     {
         $this->profilePicturePath = $profilePicturePath;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comment[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->contains($comment)) {
+            $this->comments->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
+            }
+        }
 
         return $this;
     }
