@@ -1,51 +1,95 @@
 #!/usr/bin/env node
 
-var torrentStream = require('torrent-stream');
-var fs = require("fs");
-var Transcoder = require('stream-transcoder');
-var amqp = require('amqplib/callback_api');
+const torrentStream = require('torrent-stream');
+const fs = require('fs');
 
-amqp.connect('amqp://localhost', function(err, conn) {
-  conn.createChannel(function(err, ch) {
-    var q = 'torrent-to-download';
+const Transcoder = require('stream-transcoder');
+const amqp = require('amqplib');
+const request = require('request-promise');
 
-    ch.assertQueue(q, {durable: true});
-    console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
-    ch.consume(q, function(msg) {
-      console.log(" [x] Received %s", msg.content.toString());
+const movieExtensions = ['mp4', 'mkv', 'avi'];
+const otherExtension = ['srt'];
 
-      var btih = msg.content.toString();
-      var engine = torrentStream(fs.readFileSync('/var/www/public/download/torrent/'+btih+'.torrent'));
-      engine.on('ready', function() {
-		var i = 0;
-		engine.files.forEach(function(file) {
-			console.log('"'+file.name.split('.').pop()+'"');
-				if (file.name.split('.').pop() != 'mp4')
-					return ;
-				i++;
-				console.log('filename:', file.name);
-				if (i > 1)
-				{
-					return;
-				}
-				console.log('ogogog');
-					var stream = file.createReadStream();
-						new Transcoder(stream)
-	  				    .maxSize(320, 240)
-					    .videoCodec('h264')
-					    .videoBitrate(800 * 1000)
-					    .fps(25)
-					    .audioCodec('aac')
-					    .sampleRate(44100)
-					    .channels(2)
-					    .audioBitrate(128 * 1000)
-					    .format('mp4')
-					    .on('finish', function() {
-					    	next();
-					    })
-					    .stream().pipe(fs.createWriteStream('/var/www/public/download/stream/'+btih+'.mp4'));
-	});
-});
-    }, {noAck: true});
+const TEST_MOD = false;
+
+const URL = 'amqp://localhost';
+
+const API_URL = 'localhost:4242';
+
+const OTHER_DIR = '/var/www/public/download/other/';
+
+const getMeta = console.log;
+
+const send_file_name = ({ btih, names }) => {
+  request({ method: 'POST', json: true, body: { names }, uri: `${API_URL}/${btih}` });
+};
+
+const started = (engine, btih = 'test') => () => {
+  let lock = false;
+  let files_list = [];
+  const files = engine.files.filter(
+    file =>
+      movieExtensions.includes(file.name.split('.').pop()) ||
+      otherExtension.includes(file.name.split('.').pop())
+  );
+  files.forEach(file => {
+    if (otherExtension.includes(file.name.split('.').pop())) {
+      if (!fs.existsSync(`${OTHER_DIR}/${btih}`)) {
+        fs.mkdirSync(`${OTHER_DIR}/${btih}`);
+      }
+      files_list.push(file.name);
+      return file
+        .createReadStream()
+        .pipe(fs.createWriteStream(`${OTHER_DIR}/${btih}/${file.name}`));
+    }
+    if ((lock = true)) return; // download only one video file
+    lock = true;
+    const stream = file.createReadStream();
+    new Transcoder(stream)
+      .maxSize(320, 240)
+      .videoCodec('h264')
+      .videoBitrate(800 * 1000)
+      .fps(25)
+      .audioCodec('aac')
+      .sampleRate(44100)
+      .channels(2)
+      .audioBitrate(128 * 1000)
+      .format('mp4')
+      .on('finish', function() {
+        next();
+      })
+      .stream()
+      .pipe(
+        fs.createWriteStream(
+          `/var/www/public/download/stream/${btih}.${file.name.split('.').pop()}`
+        )
+      );
   });
-});
+  send_file_name({ btih, names: files_list });
+};
+
+const consumer = async msg => {
+  let engine;
+  if (TEST_MOD) {
+    engine = torrentStream(
+      'magnet:?xt=urn:btih:284894b9787ee116983ea738742923d9a0ca1d5d&dn=Robin.Hood.2018.HC.HDRip.XviD.AC3-EVO&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969&tr=udp%3A%2F%2Fzer0day.ch%3A1337&tr=udp%3A%2F%2Fopen.demonii.com%3A1337&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969&tr=udp%3A%2F%2Fexodus.desync.com%3A6969'
+    );
+    engine.on('ready', started(engine));
+  } else {
+    const btih = msg.content.toString();
+    console.log(` [x] Received ${btih}`);
+    engine = torrentStream(fs.readFileSync(`/var/www/public/download/torrent/${btih}.torrent`));
+    engine.on('ready', started(engine, btih));
+  }
+};
+
+const main = async () => {
+  const ch = await amqp.connect(URL).then(cnn => con.createChannel());
+  const q = 'torrent-to-download';
+  ch.assertQueue(q, { durable: true });
+  console.log(` [*] Waiting for messages in ${q}. To exit press CTRL+C`);
+  ch.consume(q, consumer);
+};
+
+if (TEST_MOD) consumer();
+else main();
