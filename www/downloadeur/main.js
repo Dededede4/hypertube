@@ -19,8 +19,6 @@ const API_URL = 'http://localhost:4242';
 
 const OTHER_DIR = '/var/www/public/download/other/';
 
-const getMeta = console.log;
-
 const send_file_name = ({ btih, names }) =>
   request({
     method: 'POST',
@@ -75,11 +73,7 @@ const started = (engine, btih = 'test') => () => {
         next();
       })
       .stream()
-      .pipe(
-        fs.createWriteStream(
-          `/var/www/public/download/stream/${btih}.${file.name.split('.').pop()}`
-        )
-      );
+      .pipe(fs.createWriteStream(`/var/www/public/download/stream/${btih}.mp4`));
   });
   send_file_name({ btih, names: files_list });
 };
