@@ -1,0 +1,38 @@
+hello.paraf :  Welcome to hypertube!
+
+blabla.paraf : |
+  This project proposes you to create a web application allowing a user to search and watch videos.
+
+  The player will be directly integrated into the site, and the videos will be downloaded through the BitTorrent protocol.
+
+  The search engine will query several external sources of your choice, for example http://www.legittorrents.info, or https://archive.org.
+
+  Once a selected item, it will be downloaded to the server and broadcast on the web player at the same time. In other words, the player will not only display the video once the download is complete, but will be able to stream the stream directly.
+
+Accueil: Homepage
+
+Connection: Login
+
+Inscription: Registration
+
+Facebook login: Facebook login
+
+Intra42 login: Intra42 login
+
+Search: Search
+
+Les vidéos: Videos
+
+Les membres: Members
+
+Les commentaires: Comments
+
+Déconnexion: Logout
+
+Mon profile: My profil
+
+Made by: Made by
+
+and: and
+
+edit my profil: edit my profil

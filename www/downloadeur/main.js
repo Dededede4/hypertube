@@ -2,7 +2,6 @@
 
 const torrentStream = require('torrent-stream');
 const fs = require('fs');
-
 const Transcoder = require('stream-transcoder');
 const amqp = require('amqplib');
 const request = require('request-promise');
@@ -10,19 +9,33 @@ const request = require('request-promise');
 const movieExtensions = ['mp4', 'mkv', 'avi'];
 const otherExtension = ['srt'];
 
+const secret_key = 'toto';
+
 const TEST_MOD = false;
 
 const URL = 'amqp://localhost';
 
-const API_URL = 'localhost:4242';
+const API_URL = 'http://localhost:4242';
 
 const OTHER_DIR = '/var/www/public/download/other/';
 
-const getMeta = console.log;
+const send_file_name = ({ btih, names }) =>
+  request({
+    method: 'POST',
+    json: true,
+    body: { names },
+    uri: `${API_URL}/video/${btih}/add/subtitle`,
+    headers: { token: secret_key },
+  });
 
-const send_file_name = ({ btih, names }) => {
-  request({ method: 'POST', json: true, body: { names }, uri: `${API_URL}/${btih}` });
-};
+const send_file_size = ({ btih, length }) =>
+  request({
+    method: 'POST',
+    json: true,
+    body: { length },
+    uri: `${API_URL}/video/${btih}/add/size`,
+    headers: { token: secret_key },
+  });
 
 const started = (engine, btih = 'test') => () => {
   let lock = false;
@@ -42,7 +55,8 @@ const started = (engine, btih = 'test') => () => {
         .createReadStream()
         .pipe(fs.createWriteStream(`${OTHER_DIR}/${btih}/${file.name}`));
     }
-    if ((lock = true)) return; // download only one video file
+    if (lock) return; // download only one video file
+    send_file_size({ btih, length: file.length });
     lock = true;
     const stream = file.createReadStream();
     new Transcoder(stream)
@@ -59,11 +73,7 @@ const started = (engine, btih = 'test') => () => {
         next();
       })
       .stream()
-      .pipe(
-        fs.createWriteStream(
-          `/var/www/public/download/stream/${btih}.${file.name.split('.').pop()}`
-        )
-      );
+      .pipe(fs.createWriteStream(`/var/www/public/download/stream/${btih}.mp4`));
   });
   send_file_name({ btih, names: files_list });
 };

@@ -1,0 +1,20 @@
+{% extends 'base_bootstrap.html.twig' %}
+
+{% block body %}
+
+<div class="container">{{ app.user.firstname }} </div>
+<div class="container">{{ app.user.lastname }}</div>
+<div class="container">{{ app.user.facebookId }}</div>
+<div class="container">{{ app.user.intra42Id }}</div>
+<div class="container">{{ app.user.profilePictureFile }}</div>
+<div class="container">{{ app.user.profilePicturePath }}</div>
+<div class="container">{{ app.user.id }}</div>
+<div class="container">{{ app.user.email }}</div>
+<div class="container">{{ app.user.username }}</div>
+<div class="container">{{ app.user.password }}</div>
+
+
+<div class="container"> <a href="/profile/edit">{{ 'edit my profil' | trans }}</a> </div>
+
+
+{% endblock body %}
