@@ -23,7 +23,8 @@ RUN apt-get install -y \
 	php7.3-bcmath \
 	gnupg \
 	ffmpeg libavcodec-extra libav-tools \
-	rabbitmq-server
+	rabbitmq-server \
+	sudo
 
 # For nodejs 11
 RUN curl -sL https://deb.nodesource.com/setup_11.x | bash -
@@ -36,6 +37,9 @@ EXPOSE 443
 EXPOSE 9091
 
 COPY ./config/nginx /etc/nginx/sites-available/default
+COPY ./config/downloader /etc/init.d/downloader
+
+RUN chmod 715 /etc/init.d/downloader
 
 # Install symfony
 

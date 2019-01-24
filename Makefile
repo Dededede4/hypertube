@@ -11,6 +11,7 @@ install:
 	composer install --ignore-platform-reqs # php7.3-bcmath no detected ?
 	make run
 	docker exec hypertueub bash -c "cd /var/www/front && npm i && npm run build &&  node html_to_twig /var/www/front/build/index.html > /var/www/templates/base.html.twig && rm -rf /var/www/public/react &&  mv /var/www/front/build /var/www/public/react ;"
+	docker exec hypertueub bash -c "cd /var/www/downloadeur/ && npm i"
 	docker exec hypertueub php /var/www/bin/console doctrine:database:create
 	docker exec hypertueub php /var/www/bin/console doctrine:schema:update --force
 	# Just for somes days of dev
@@ -21,6 +22,7 @@ run:
 	docker exec hypertueub /etc/init.d/php7.3-fpm start
 	docker exec hypertueub service rabbitmq-server start
 	docker exec hypertueub bin/console doctrine:migrations:migrate
+	docker exec hypertueub service downloader start
 
 clean:
 	-docker kill hypertueub
