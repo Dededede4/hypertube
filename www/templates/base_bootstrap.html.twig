@@ -45,24 +45,27 @@
 	                    {% endif %}
 
 	                    {% if is_granted('ROLE_USER') %}
-	                    	                  <li class="nav-item">
-	                    <a class="nav-link" href="{{ path('connect_intra42_start') }}">Les vidéos</a>
-	               </li>
-	               <li class="nav-item">
-	                    <a class="nav-link" href="{{ path('connect_intra42_start') }}">Les membres</a>
-	               </li>
-	               <li class="nav-item">
-	                    <a class="nav-link" href="{{ path('connect_intra42_start') }}">Les commentaires</a>
-	               </li>
+                            {% set is_active = app.request.attributes.get('_route') == 'movies' %}
+                            <li class="nav-item {% if is_active %}active{% endif %}">
+                                <a class="nav-link" href="{{ path('movies') }}">Les vidéos {% if is_active %}<span class="sr-only">(current)</span>{% endif %}</a>
+                           </li>
+                           <li class="nav-item">
+                                <a class="nav-link" href="{{ path('connect_intra42_start') }}">Les membres {% if is_active %}<span class="sr-only">(current)</span>{% endif %}</a>
+                           </li>
 
-	               {% set is_active = app.request.attributes.get('_route') == 'fos_user_profile_show' %}
-	               <li class="nav-item {% if is_active %}active{% endif %}">
-	                    <a class="nav-link" href="{{ path('fos_user_profile_show') }}">Mon profil{% if is_active %}<span class="sr-only">(current)</span>{% endif %}</a>
-	               </li>
-	               
-	               <li class="nav-item">
-	                    <a class="nav-link" href="{{ path('fos_user_security_logout') }}">Déconnexion</a>
-	               </li>
+                            {% set is_active = app.request.attributes.get('_route') == 'comments' %}
+                           <li class="nav-item {% if is_active %}active{% endif %}">
+                                <a class="nav-link" href="{{ path('comments') }}">Les commentaires</a>
+                           </li>
+
+                           {% set is_active = app.request.attributes.get('_route') == 'fos_user_profile_show' %}
+                           <li class="nav-item {% if is_active %}active{% endif %}">
+                                <a class="nav-link" href="{{ path('fos_user_profile_show') }}">Mon profil{% if is_active %}<span class="sr-only">(current)</span>{% endif %}</a>
+                           </li>
+
+                           <li class="nav-item">
+                                <a class="nav-link" href="{{ path('fos_user_security_logout') }}">Déconnexion</a>
+                           </li>
 	                    {% endif %}
                   </ul>
                   {% if is_granted('ROLE_USER') %}

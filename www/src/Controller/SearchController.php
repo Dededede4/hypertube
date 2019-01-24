@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
+use App\Entity\User;
+use App\Entity\Video;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -45,7 +48,7 @@ class SearchController extends AbstractController
     public function searchAction(Request $request)
     {
         $returnValues = [];
-        
+
         $videos = $this->searchAndFlush($request->query->get('s'));
 
         return $this->render(
@@ -65,5 +68,50 @@ class SearchController extends AbstractController
         $entityManager->flush();
 
         return $videos;
+    }
+
+
+    /**
+     * @Route("/movies/", name="movies")
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function moviesAction(Request $request)
+    {
+        $videos = $this->getDoctrine()
+            ->getRepository(Video::class)
+            ->findAll();
+
+        return $this->render(
+            'Search/index.html.twig',
+            ['videos' => $videos]
+        );
+    }
+
+    /**
+     * @Route("/comments/", name="comments")
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function commentsAction(Request $request)
+    {
+        $comments = $this->getDoctrine()
+            ->getRepository(Comment::class)
+            ->findAll();
+
+        return $this->render(
+            'Search/comments.html.twig',
+            ['comments' => $comments]
+        );
+    }
+
+    /**
+     * @Route("/user/{id}", name="user")
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function userAction(User $user, Request $request)
+    {
+        return $this->render(
+            'Search/comments.html.twig',
+            ['comments' => $comments]
+        );
     }
 }

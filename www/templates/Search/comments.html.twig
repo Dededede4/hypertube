@@ -1,0 +1,20 @@
+{% extends 'base_bootstrap.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        {% for comment in comments %}
+            <div class="row">
+                <div class="col-sm-1">
+                    <div class="circle-img img-circle">
+                        <img src="{{ asset('/avatars/' ~ comment.user.profilePicturePath) }}" class="img-fluid"/>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <p>{{ comment.user.firstname }} {{ comment.user.lastname }}<br/>{{ comment.text | nl2br }}</p>
+                </div>
+            </div>
+        {% else %}
+            Pas de commentaires
+        {% endfor %}
+    </div>
+{% endblock body %}
