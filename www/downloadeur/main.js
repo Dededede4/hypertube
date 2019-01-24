@@ -11,7 +11,7 @@ const otherExtension = ['srt'];
 
 const secret_key = 'toto';
 
-const TEST_MOD = true;
+const TEST_MOD = false;
 
 const URL = 'amqp://localhost';
 
@@ -27,7 +27,7 @@ const send_file_name = ({ btih, names }) =>
     json: true,
     body: { names },
     uri: `${API_URL}/video/${btih}/add/subtitle`,
-    headers: { tojen: secret_key },
+    headers: { token: secret_key },
   });
 
 const send_file_size = ({ btih, length }) =>
@@ -36,7 +36,7 @@ const send_file_size = ({ btih, length }) =>
     json: true,
     body: { length },
     uri: `${API_URL}/video/${btih}/add/size`,
-    headers: { tojen: secret_key },
+    headers: { token: secret_key },
   });
 
 const started = (engine, btih = 'test') => () => {
