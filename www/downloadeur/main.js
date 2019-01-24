@@ -94,7 +94,7 @@ const consumer = async msg => {
 };
 
 const main = async () => {
-  const ch = await amqp.connect(URL).then(cnn => con.createChannel());
+  const ch = await amqp.connect(URL).then(con => con.createChannel());
   const q = 'torrent-to-download';
   ch.assertQueue(q, { durable: true });
   console.log(` [*] Waiting for messages in ${q}. To exit press CTRL+C`);
