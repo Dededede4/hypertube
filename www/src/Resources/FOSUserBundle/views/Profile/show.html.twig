@@ -8,13 +8,18 @@
 <div class="container">{{ app.user.intra42Id }}</div>
 <div class="container">{{ app.user.profilePictureFile }}</div>
 <div class="container">{{ app.user.profilePicturePath }}</div>
+
+<div class="circle-img img-circle">
+	<img src="{{ asset('/avatars/' ~ app.user.profilePicturePath) }}" class="img-fluid"/>
+</div>
+
 <div class="container">{{ app.user.id }}</div>
 <div class="container">{{ app.user.email }}</div>
 <div class="container">{{ app.user.username }}</div>
 <div class="container">{{ app.user.password }}</div>
 
 
-<div class="container"> <a href="/profile/edit">{{ 'edit my profil' | trans }}</a> </div>
+<div class="container"> <a href="{{path('fos_user_profile_edit')}}" >{{ 'edit my profil' | trans }}</a> </div>
 
 
 {% endblock body %}

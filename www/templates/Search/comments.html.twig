@@ -10,7 +10,8 @@
                     </div>
                 </div>
                 <div class="col-sm">
-                    <p>{{ comment.user.firstname }} {{ comment.user.lastname }}<br/>{{ comment.text | nl2br }}</p>
+                    <p><a href="{{path('user', {'id':comment.user.id})}}"> {{comment.user.username}} </a>
+                    <br/>{{ comment.text | nl2br }}</p>
                 </div>
             </div>
         {% else %}

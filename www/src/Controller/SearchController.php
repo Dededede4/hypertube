@@ -110,8 +110,8 @@ class SearchController extends AbstractController
     public function userAction(User $user, Request $request)
     {
         return $this->render(
-            'Search/comments.html.twig',
-            ['comments' => $comments]
+            'Search/user.html.twig',
+            ['user' => $user]
         );
     }
 }
