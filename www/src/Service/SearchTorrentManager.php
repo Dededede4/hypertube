@@ -10,7 +10,7 @@ class SearchTorrentManager
 {
     public function search($query)
     {
-        return array_merge($this->searchYTSam($query));
+        return array_merge($this->searchYTSam($query), $this->searchLegitTorrent($query), $this->searchArchiveOrg($query));
     }
 
     public function searchLegitTorrent($query)
