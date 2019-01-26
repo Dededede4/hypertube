@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Comment;
 use App\Entity\User;
 use App\Entity\Video;
+use App\Entity\Search;
+use App\Form\SearchEngineType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -47,13 +49,28 @@ class SearchController extends AbstractController
      */
     public function searchAction(Request $request)
     {
-        $returnValues = [];
+        $search = new Search();
+        $form = $this->createForm(SearchEngineType::class, $search, [
+            'action' => $this->generateUrl('search'),
+            'method' => 'GET',
+            'csrf_protection' => false,
+        ]);
 
-        $videos = $this->searchAndFlush($request->query->get('s'));
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            $videos = $this->searchAndFlush($search->getSearch());
+            return $this->render(
+                'Search/index.html.twig',
+                ['videos' => $videos, 'form' => $form->createView()]
+            );
+        }
+
+        
 
         return $this->render(
             'Search/index.html.twig',
-            ['videos' => $videos]
+            ['videos' => $videos, 'form' => $form->createView()]
         );
     }
 

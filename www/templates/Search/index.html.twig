@@ -183,6 +183,13 @@ a:hover {
 
 <div class="container">
 
+      {{ form_start(form) }}
+        {{ form_widget(form) }}
+
+        <input type="submit" value="Send" />
+
+        {{ form_end(form) }}
+
 	{% for video in videos %}
 	<div class="movie-card" onclick="window.location = '{{ path('panel', {'video' : video.btih }) }}';">
 		<div class="movie-header" style="background: url('{% if video.pictureUrl %}{{ video.pictureUrl }}{%else%}{{ asset('/imgs/nocover.jpg') }}{%endif%}'); background-size: cover;">
