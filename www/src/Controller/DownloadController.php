@@ -5,7 +5,13 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\File\Stream;
+
+use App\Component\InfiniteBinaryFileResponse;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -28,9 +34,13 @@ class DownloadController extends AbstractController
      */
     public function downloadAction(Video $video, TorrentManager $manager)
     {
-        $manager->download($video);
-        return new RedirectResponse('/download/stream/'.$video->getBtih().'.mp4');
+        //$manager->download($video);
+        //sleep(10);
+
+        $stream  = new Stream('/var/www/public/download/stream/'.$video->getBtih().'.mp4');
+        return new InfiniteBinaryFileResponse($stream);
     }
+
 
     /**
      * @Route("/panel/{video}", name="panel")
@@ -61,4 +71,6 @@ class DownloadController extends AbstractController
             ['video' => $video, 'form' => $form->createView()]
         );
     }
+
+
 }
