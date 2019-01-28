@@ -182,13 +182,14 @@ a:hover {
 </style>
 
 <div class="container">
-
+{% if form is defined %}
       {{ form_start(form) }}
         {{ form_widget(form) }}
 
         <input type="submit" value="Send" />
 
         {{ form_end(form) }}
+{% endif %}
 
 	{% for video in videos %}
 	<div class="movie-card" onclick="window.location = '{{ path('panel', {'video' : video.btih }) }}';">
