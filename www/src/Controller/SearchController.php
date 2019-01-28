@@ -59,18 +59,16 @@ class SearchController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            $videos = $this->searchAndFlush($search->getSearch());
+            $videos = $this->searchAndFlush($search);
             return $this->render(
                 'Search/index.html.twig',
                 ['videos' => $videos, 'form' => $form->createView()]
             );
         }
 
-        
-
         return $this->render(
             'Search/index.html.twig',
-            ['videos' => $videos, 'form' => $form->createView()]
+            ['videos' => [], 'form' => $form->createView()]
         );
     }
 
