@@ -42,3 +42,58 @@ Made by: Développé par
 and: et
 
 edit my profil: édité mon profil
+
+Seeder min: Seeder min
+
+Seeder max: Seeder max
+
+Production year min: année de production min
+
+Production year max: année de production max
+
+Notation max: note max
+
+Notation min: note min
+
+Genre: Genre
+
+Text: Votre message
+
+Sort by: Trier par
+
+Order by: Ordre
+Action: Action
+Adventure: Aventure
+Animation: Animation
+Biography: Biographie
+Comedy: Comedie
+Crime: Crime
+Documentary: Documentaire
+Drama: Drame
+Family: Famile
+Fantasy: Fantaisie
+Film Noir: Film Noir
+History: Historique
+Horror: Horreur
+Music: Music
+Musical: Comedie Musicale
+Mystery: Mistere
+Romance: Romantique
+Sci-Fi: Science-fiction
+Short: court
+Sport: Sport
+Superhero: Superhero
+Thriller: Policier
+War: Guerre
+Western: Western
+peers: pairs
+
+desc: deccroissant
+asc: croissant
+title: Titre
+year: Année
+rating: Note
+seeds: seeds
+download_count: nombre téléchargement
+like_count: nombre de j'aime
+date_added: date d'ajout

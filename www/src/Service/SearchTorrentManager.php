@@ -79,11 +79,15 @@ class SearchTorrentManager
 
     public function searchArchiveOrg($search)
     {
-        $url = 'https://archive.org/advancedsearch.php?q=mediatype%3Amovies+'.urlencode($search->getSearch()).'&fl%5B%5D=avg_rating&fl%5B%5D=backup_location&fl%5B%5D=btih&fl%5B%5D=call_number&fl%5B%5D=collection&fl%5B%5D=contributor&fl%5B%5D=coverage&fl%5B%5D=creator&fl%5B%5D=date&fl%5B%5D=description&fl%5B%5D=downloads&fl%5B%5D=external-identifier&fl%5B%5D=foldoutcount&fl%5B%5D=format&fl%5B%5D=genre&fl%5B%5D=headerImage&fl%5B%5D=identifier&fl%5B%5D=imagecount&fl%5B%5D=indexflag&fl%5B%5D=item_size&fl%5B%5D=language&fl%5B%5D=licenseurl&fl%5B%5D=mediatype&fl%5B%5D=members&fl%5B%5D=month&fl%5B%5D=name&fl%5B%5D=noindex&fl%5B%5D=num_reviews&fl%5B%5D=oai_updatedate&fl%5B%5D=publicdate&fl%5B%5D=publisher&fl%5B%5D=related-external-id&fl%5B%5D=reviewdate&fl%5B%5D=rights&fl%5B%5D=scanningcentre&fl%5B%5D=source&fl%5B%5D=stripped_tags&fl%5B%5D=subject&fl%5B%5D=title&fl%5B%5D=type&fl%5B%5D=volume&fl%5B%5D=week&fl%5B%5D=year&sort%5B%5D=titleSorter+asc&sort%5B%5D=&sort%5B%5D=&rows=100&page=1&output=json&save=yes#raw';
+        $url = 'https://archive.org/advancedsearch.php?q=(movies)+AND+title%3A('.urlencode($search->getSearch()).')+AND+mediatype%3A(movies)&+AND+date%3A%5B'.urlencode($search->getProductionYearMin()).'+TO+'.urlencode($search->getProductionYearMax()).'%5D&fl%5B%5D=avg_rating&fl%5B%5D=backup_location&fl%5B%5D=btih&fl%5B%5D=call_number&fl%5B%5D=collection&fl%5B%5D=contributor&fl%5B%5D=coverage&fl%5B%5D=creator&fl%5B%5D=date&fl%5B%5D=description&fl%5B%5D=downloads&fl%5B%5D=external-identifier&fl%5B%5D=foldoutcount&fl%5B%5D=format&fl%5B%5D=genre&fl%5B%5D=headerImage&fl%5B%5D=identifier&fl%5B%5D=imagecount&fl%5B%5D=indexflag&fl%5B%5D=item_size&fl%5B%5D=language&fl%5B%5D=licenseurl&fl%5B%5D=mediatype&fl%5B%5D=members&fl%5B%5D=month&fl%5B%5D=name&fl%5B%5D=noindex&fl%5B%5D=num_reviews&fl%5B%5D=oai_updatedate&fl%5B%5D=publicdate&fl%5B%5D=publisher&fl%5B%5D=related-external-id&fl%5B%5D=reviewdate&fl%5B%5D=rights&fl%5B%5D=scanningcentre&fl%5B%5D=source&fl%5B%5D=stripped_tags&fl%5B%5D=subject&fl%5B%5D=title&fl%5B%5D=type&fl%5B%5D=volume&fl%5B%5D=week&fl%5B%5D=year&sort%5B%5D=titleSorter+'.urlencode($search->getOrderBy()).'&sort%5B%5D=&sort%5B%5D=&rows=100&page=1&output=json&save=yes#raw';
+
+
+
         $datas = json_decode(file_get_contents($url), true);
         // Check if result is empty
         $datas = $datas['response']['docs'];
-        // dump($datas); // a commenter apres
+        dump($datas); // a commenter apres
+        // die;
 
         $videos = [];
         foreach ($datas as $data) {
@@ -110,7 +114,7 @@ class SearchTorrentManager
 
     public function searchYTSam($search)
     {
-        $url = 'https://yts.am/api/v2/list_movies.json?query_term='.urlencode($search->getSearch());
+        $url = 'https://yts.am/api/v2/list_movies.json?query_term='.urlencode($search->getSearch()).'&sort='.urlencode($search->getSortBy()).'&order_by='.urlencode($search->getOrderBy()).'&minimum_rating='.urlencode($search->getNotationMin()).'&genre='.urlencode($search->getGenre());
         $datas = json_decode(file_get_contents($url), true);
 
         if (!is_array($datas['data']))
@@ -150,6 +154,7 @@ class SearchTorrentManager
                 ->setProductionDate(\DateTime::createFromFormat('Y-m-d H:i:s', $data['year'].'-01-01 00:00:00'))
                 ->setDuration($data['runtime'])
                 ->setPictureUrl($data['medium_cover_image'])
+                ->setNotation($data['rating'])
                 ->setSource(1)
                 ;
             $videos[] = $video;

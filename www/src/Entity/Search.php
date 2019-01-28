@@ -25,6 +25,7 @@ class Search
     private $sortBy;
 
 
+
     public function getSeederMin()
     {
         return $this->seederMin;
