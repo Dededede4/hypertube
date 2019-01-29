@@ -42,11 +42,22 @@ class DownloadController extends AbstractController
 
             $video->setProcessStarted(true);
             
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($video);
-            $entityManager->flush();
+            
         }
+        $video->setLastSeeAt(new \DateTime());
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($video);
+        $entityManager->flush();
+        return $this->redirectToRoute('streamloops', ['video' => $video->getBtih()]);
+    }
 
+    /**
+     * @Route("/stream/loops/{video}", name="streamloops")
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function downloadLoopAction(Video $video)
+    {
+        
         $i = 0;
         while(1)
         {

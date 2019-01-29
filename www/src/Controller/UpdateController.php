@@ -47,7 +47,7 @@ class UpdateController extends AbstractController
 
     	$video->setDownloadBytesDone($val['length'], true);
 
-    	if ($video->getDuration())
+    	if ($video->getDuration() && $video->getDownloadStartedAt())
     	{
 	    	$secondDownload = (new \DateTime())->getTimestamp() - $video->getDownloadStartedAt()->getTimestamp();
 	    	$estimatedDownloadDuration = $secondDownload * $video->getBytes() / $video->getDownloadBytesDone();

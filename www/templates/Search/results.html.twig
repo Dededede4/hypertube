@@ -12,25 +12,20 @@
 				<a href="#">
 					<h3 class="movie-title">{{ video.title }}</h3>
 				</a>
-				<div class="imax-logo"></div>
 			</div>
 			<div class="movie-info">
 				<div class="info-section">
-					<label>Date & Time</label>
-					<span>Sun 8 Sept - 10:00PM</span>
+					<label>Notation</label>
+					<span>{{ video.notation }}</span>
 				</div><!--date,time-->
 				<div class="info-section">
-					<label>Screen</label>
-					<span>03</span>
+					<label>{{'Production date' | trans}}</label>
+					<span>{% if video.getProductionDate %}{{ video.getProductionDate | date('Y-m-d') }}{% endif %}</span>
 				</div><!--screen-->
 				<div class="info-section">
-					<label>Row</label>
-					<span>F</span>
+					<label>See ?</label>
+					<span>{% if video.lastSeeAt is null %}Never see{% else %}See{% endif %}</span>
 				</div><!--row-->
-				<div class="info-section">
-					<label>Seat</label>
-					<span>21,22</span>
-				</div><!--seat-->
 			</div>
 		</div><!--movie-content-->
 	</div><!--movie-card-->

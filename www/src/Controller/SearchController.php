@@ -82,13 +82,30 @@ class SearchController extends AbstractController
     {
         $videos = $this->searchTorrentManager->search($query, $page);
 
+        $persistedVideos = [];
+
         $entityManager = $this->getDoctrine()->getManager();
         foreach ($videos as $video) {
-            $entityManager->merge($video);
+            
+            $videoBdd = $this->getDoctrine()
+            ->getRepository(Video::class)
+            ->find($video->getBtih());
+
+            if ($videoBdd)
+            {
+                $persistedVideos[] = $videoBdd;
+            }
+            else
+            {
+                $entityManager->persist($video);
+                $persistedVideos[] = $video;
+            }
+            
+            
         }
         $entityManager->flush();
 
-        return $videos;
+        return $persistedVideos;
     }
 
 

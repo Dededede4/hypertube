@@ -19,6 +19,21 @@ class VideoRepository extends ServiceEntityRepository
         parent::__construct($registry, Video::class);
     }
 
+    public function delOld()
+    {
+        $to   = new \DateTime('-1 month');
+
+        $qb = $this->createQueryBuilder("e");
+        $qb
+            ->andWhere('e.lastSeeAt < :to')
+            ->setParameter('to', $to)
+            ->delete()
+            ->getQuery()
+            ->execute()
+            ;
+        return ;
+    }
+
     // /**
     //  * @return Video[] Returns an array of Video objects
     //  */
