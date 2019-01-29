@@ -52,7 +52,7 @@
 
                             {% set is_active = app.request.attributes.get('_route') == 'moviesnotimetofinish' %}
                             <li class="nav-item {% if is_active %}active{% endif %}">
-                                <a class="nav-link" href="{{ path('search') }}">{{'Les vidéos populaires' | trans | nl2br}} {% if is_active %}<span class="sr-only">(current)</span>{% endif %}</a>
+                                <a class="nav-link" href="http://localhost:4242/search/?search_engine%5BseederMin%5D=&search_engine%5BseederMax%5D=&search_engine%5Bsearch%5D=&search_engine%5BproductionYearMin%5D=&search_engine%5BproductionYearMax%5D=&search_engine%5BnotationMin%5D=&search_engine%5BnotationMax%5D=&search_engine%5Bgenre%5D=&search_engine%5BorderBy%5D=desc&search_engine%5BsortBy%5D=rating">{{'Les vidéos populaires' | trans | nl2br}} {% if is_active %}<span class="sr-only">(current)</span>{% endif %}</a>
                            </li>
 
 
