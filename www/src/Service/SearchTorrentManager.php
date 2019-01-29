@@ -110,7 +110,7 @@ class SearchTorrentManager
             foreach ($crawler as $domElement) {
                 if (is_null($domElement))
                 {
-                    var_dump('is_null');
+                    //var_dump('is_null');
                     continue;
                 }
                 if ($domElement->childNodes[0]->nodeValue == 'Description')
@@ -146,7 +146,7 @@ class SearchTorrentManager
         $datas = json_decode(file_get_contents($url), true);
         // Check if result is empty
         $datas = $datas['response']['docs'];
-        dump($datas); // a commenter apres
+        //dump($datas); // a commenter apres
         // die;
 
         $videos = [];
@@ -187,7 +187,7 @@ class SearchTorrentManager
             return [];
 
         $datas = ($datas['data']['movies']); //problemme si pas de movies
-        dump($datas); // a commenter apes
+        //dump($datas); // a commenter apes
         // die;
         $videos = [];
 
@@ -225,7 +225,7 @@ class SearchTorrentManager
                 ;
             $videos[] = $video;
         }
-        dump($video);
+        //dump($video);
         return $videos;
     }
 
