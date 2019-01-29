@@ -30,23 +30,23 @@ class SearchTorrentManager
             }
             if ('peers' === $search->getSortBy())
             {
-
+                $val = $a->getNbSeeder() - $b->getNbSeeder();
             }
             if ('seeds' === $search->getSortBy())
             {
-
+                $val = $a->getNbSeeder() - $b->getNbSeeder();
             }
             if ('download_count' === $search->getSortBy())
             {
-
+                $val = $a->getNbLeecher() - $b->getNbLeecher();
             }
             if ('like_count' === $search->getSortBy())
             {
-
+                $val = $a->getNotation() - $b->getNotation();
             }
             if ('date_added' === $search->getSortBy())
             {
-
+                $val = $a->getProductionDate() - $b->getProductionDate();
             }
             
             if ('desc' == $search->getOrderBy())
@@ -150,6 +150,8 @@ class SearchTorrentManager
         // die;
 
         $videos = [];
+        if ($datas === null)
+            return $videos;
         foreach ($datas as $data) {
             if(empty($data['btih']))
                 continue;
