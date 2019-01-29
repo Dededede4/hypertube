@@ -16,6 +16,14 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class User extends BaseUser
 {
     /**
+     * @Assert\Regex(
+     *  pattern="/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{7,}/",
+     *  message="Password must be seven or more characters long and contain at least one digit, one upper- and one lowercase character."
+     * )
+     */
+    protected $plainPassword;
+
+    /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
