@@ -9,7 +9,9 @@
         </video>
 	<div class="container">
 		<h2>{{ video.title }}</h2>
-		<p>{{ video.description }}</p>
+		<p>{% if video.getProductionDate %}{{'Production date' | trans  | nl2br}}{{ video.getProductionDate | date('Y-m-d') }}{% endif %}</p>
+        <p>{{ video.description }}</p>
+
 
 		{{ form_start(form) }}
         {{ form_widget(form) }}

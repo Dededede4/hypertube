@@ -31,6 +31,7 @@ class DownloadController extends AbstractController
 {
     /**
      * @Route("/stream/{video}", name="stream")
+     * @Security("is_granted('ROLE_USER')")
      */
     public function downloadAction(Video $video, TorrentManager $manager)
     {

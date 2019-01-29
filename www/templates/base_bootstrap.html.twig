@@ -47,13 +47,18 @@
 	                    {% if is_granted('ROLE_USER') %}
                             {% set is_active = app.request.attributes.get('_route') == 'movies' %}
                             <li class="nav-item {% if is_active %}active{% endif %}">
-                                <a class="nav-link" href="{{ path('movies') }}">{{'Les vidéos' | trans  | nl2br}} {% if is_active %}<span class="sr-only">(current)</span>{% endif %}</a>
+                                <a class="nav-link" href="{{ path('movies') }}">{{'Les vidéos telechargees' | trans  | nl2br}} {% if is_active %}<span class="sr-only">(current)</span>{% endif %}</a>
+                           </li>
+
+                            {% set is_active = app.request.attributes.get('_route') == 'moviesnotimetofinish' %}
+                            <li class="nav-item {% if is_active %}active{% endif %}">
+                                <a class="nav-link" href="{{ path('search') }}">{{'Les vidéos populaires' | trans | nl2br}} {% if is_active %}<span class="sr-only">(current)</span>{% endif %}</a>
                            </li>
 
 
                           {% set is_active = app.request.attributes.get('_route') == 'comments' %}
                            <li class="nav-item {% if is_active %}active{% endif %}">
-                                <a class="nav-link" href="{{ path('comments') }}">{{'Les commentaires' | trans  | nl2br}}</a>
+                                <a class="nav-link" href="{{ path('comments') }}">{{'Les commentaires' | trans | nl2br}}</a>
                            </li>
 
                           {% set is_active = app.request.attributes.get('_route') == 'fos_user_profile_show' %}
