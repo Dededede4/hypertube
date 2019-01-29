@@ -71,12 +71,10 @@ class OAuthController extends Controller
             $facebookUser = $client->fetchUser();
 
             $user = $this->getDoctrine()->getManager()->getRepository("App\Entity\User")->findOneBy(array('facebookId' => $facebookUser->getId()));
-            dump($facebookUser);
-            die;
 
             if(null == $user)
             {
-                $user = $this->register($facebookUser->getEmail(), $facebookUser->getId());
+                $user = $this->register($facebookUser->getEmail(), $facebookUser->getId(), $facebookUser->getFirstName(), $facebookUser->getLastName());
             }
             $this->connect($request, $user);
             return new RedirectResponse($this->generateUrl('homepage'));
@@ -107,7 +105,7 @@ class OAuthController extends Controller
 
             if(null == $user)
             {
-                $user = $this->register($intraUser['email'], $intraUser['id']);
+                $user = $this->register($intraUser['email'], $intraUser['id'], $intraUser['first_name'], $intraUser['last_name'],);
             }
             $this->connect($request, $user);
             return new RedirectResponse($this->generateUrl('homepage'));
@@ -118,7 +116,7 @@ class OAuthController extends Controller
         }
     }
 
-    private function register($email, $fbid){    
+    private function register($email, $fbid, $firstName, $lastName){    
         $userManager = $this->get('fos_user.user_manager');
 
         // Or you can use the doctrine entity manager if you want instead the fosuser manager
@@ -146,6 +144,8 @@ class OAuthController extends Controller
         // this method will encrypt the password with the default settings :)
         $user->setFacebookId($fbid);
         $user->setPlainPassword('aunisteaunsiteaunristea');
+        $user->setFirstName($firstName);
+        $user->setLastName($lastName);
         $userManager->updateUser($user);
 
         return $user;

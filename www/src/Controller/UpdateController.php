@@ -19,6 +19,8 @@ class UpdateController extends AbstractController
      */
     public function downloadAction(Video $video, Request $request)
     {
+    	if ($request->getClientIp() !== '127.0.0.1')
+    		return new Response();
     	$val = json_decode($request->getContent(), true);
     	$entityManager = $this->getDoctrine()->getManager();
     	foreach ($val['names'] as $name) {
@@ -39,6 +41,8 @@ class UpdateController extends AbstractController
      */
     public function addSizeAction(Video $video, Request $request, LoggerInterface $logger)
     {
+    	if ($request->getClientIp() !== '127.0.0.1')
+    		return new Response();
     	$val = json_decode($request->getContent(), true);
 
     	$video->setDownloadBytesDone($val['length'], true);
@@ -74,6 +78,8 @@ class UpdateController extends AbstractController
      */
     public function setSizeAction(Video $video, Request $request, LoggerInterface $logger)
     {
+    	if ($request->getClientIp() !== '127.0.0.1')
+    		return new Response();
     	$video->setDownloadStartedAt(new \DateTime());
     	$val = json_decode($request->getContent(), true);
 
