@@ -3,7 +3,8 @@ all: build run
 build:
 	docker build --tag=hyperteub .
 
-install: 
+install:
+	rm -f /var/www/var/cache/
 	make build
 	docker run --rm --interactive --tty \
 	--volume $(PWD)/www:/app \
@@ -16,6 +17,7 @@ install:
 	docker exec hypertueub php /var/www/bin/console doctrine:schema:update --force
 	# Just for somes days of dev
 	docker exec hypertueub chmod 666 /tmp/bdd.sqlite
+	rm -f /var/www/var/cache/
 
 run:
 	docker run -d --name hypertueub -p 4242:80 -v $(CURDIR)/www:/var/www hyperteub
