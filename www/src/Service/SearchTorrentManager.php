@@ -8,7 +8,7 @@ use App\Entity\Video;
 
 class SearchTorrentManager
 {
-    public function search($search, $page = 1)
+    public function search($search, $page)
     {
         $videos =  array_merge($this->searchYTSam($search), $this->searchLegitTorrent($search), $this->searchArchiveOrg($search));
 
