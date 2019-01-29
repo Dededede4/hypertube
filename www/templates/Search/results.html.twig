@@ -15,7 +15,7 @@
 			</div>
 			<div class="movie-info">
 				<div class="info-section">
-					<label>Notation</label>
+					<label>{{'rating' | trans}}</label>
 					<span>{{ video.notation }}</span>
 				</div><!--date,time-->
 				<div class="info-section">
@@ -23,8 +23,8 @@
 					<span>{% if video.getProductionDate %}{{ video.getProductionDate | date('Y-m-d') }}{% endif %}</span>
 				</div><!--screen-->
 				<div class="info-section">
-					<label>See ?</label>
-					<span>{% if video.lastSeeAt is null %}Never see{% else %}See{% endif %}</span>
+					<label>{{'See' | trans}} ?</label>
+					<span>{% if video.lastSeeAt is null %}{{'Never see' | trans}}{% else %}{{'See' | trans}}{% endif %}</span>
 				</div><!--row-->
 			</div>
 		</div><!--movie-content-->

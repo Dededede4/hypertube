@@ -20,7 +20,7 @@
 
         {{ form_end(form) }}
 	
-        <h3>{{ video.comments | length }} commentaire(s)</h3>
+        <h3>{{ video.comments | length }} {{ 'commentaire(s)' | trans }}</h3>
 
         {% for comment in video.comments %}
             <div class="row">

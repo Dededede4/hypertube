@@ -63,7 +63,19 @@ class SearchTorrentManager
         foreach ($videos as $video) {
             if ($i >= $start && $i < $stop)
             {
-                $newVideos[] = $video;
+                $good = true;
+                if(NULL != $search->getProductionYearMin())
+                {
+                    if ($video->getProductionDate()->format('Y') < $search->getProductionYearMin())
+                        $good = false;
+                }
+                if(NULL != $search->getProductionYearMax())
+                {
+                    if ($video->getProductionDate()->format('Y') > $search->getProductionYearMax())
+                        $good = false;
+                }
+                if($good)
+                    $newVideos[] = $video;
             }
             $i++;
         }

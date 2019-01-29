@@ -87,7 +87,8 @@ Thriller: Policier
 War: Guerre
 Western: Western
 peers: pairs
-
+Never see: Pas Vu
+See: Deja Vu
 desc: deccroissant
 asc: croissant
 title: Titre
@@ -98,8 +99,10 @@ download_count: nombre téléchargement
 like_count: nombre de j'aime
 date_added: date d'ajout
 
-Production date: date de production =
+Production date: date de production
 Pas de commentaires: Pas de commentaires
 
 Les vidéos populaires: Les vidéos populaires
 Les vidéos telechargees: Les vidéos telechargees
+
+commentaire(s): commentaire(s)

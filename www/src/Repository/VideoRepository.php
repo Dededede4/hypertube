@@ -29,8 +29,7 @@ class VideoRepository extends ServiceEntityRepository
             ->setParameter('to', $to)
             ->delete()
             ->getQuery()
-            ->execute()
-            ;
+            ->execute();
         return ;
     }
 

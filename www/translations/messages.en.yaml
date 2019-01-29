@@ -83,7 +83,8 @@ Thriller: Thriller
 War: War
 Western: Western
 peers: peers
-
+Never see: Never see
+see: see
 desc: desc
 asc: asc
 title: title
@@ -93,8 +94,10 @@ seeds: seeds
 download_count: download_count
 like_count: like_count
 date_added: date_added
-Production date: Production date =
+Production date: Production date
 Pas de commentaires: No Comments
 
 Les vidéos populaires: Popular Movies
 Les vidéos telechargees: Uploaded videos
+
+commentaire(s): Comment(s)
