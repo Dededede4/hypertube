@@ -34,11 +34,35 @@ class DownloadController extends AbstractController
      */
     public function downloadAction(Video $video, TorrentManager $manager)
     {
-        //$manager->download($video);
-        //sleep(10);
+        
+        if (false == $video->getProcessStarted())
+        {
+            $manager->download($video);
 
-        $stream  = new Stream('/var/www/public/download/stream/'.$video->getBtih().'.mp4');
-        return new InfiniteBinaryFileResponse($stream);
+            $video->setProcessStarted(true);
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($video);
+            $entityManager->flush();
+        }
+
+        $i = 0;
+        while(1)
+        {
+            $i++;
+            $video = $this->getDoctrine()->getManager()->getRepository(Video::class)->find($video->getBtih());;
+
+            if ($video->getDownloadable())
+            {
+                $stream  = new Stream('/var/www/public/download/stream/'.$video->getBtih().'.mp4');
+                return new InfiniteBinaryFileResponse($stream);
+            }
+            sleep(2);
+            if ($i === 10)
+            {
+                return $this->redirectToRoute('stream', ['video' => $video->getBtih()]);
+            }
+        }
     }
 
 

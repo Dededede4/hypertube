@@ -6,6 +6,8 @@ const Transcoder = require('stream-transcoder');
 const amqp = require('amqplib');
 const request = require('request-promise');
 
+var Peer = require('simple-peer');
+
 const movieExtensions = ['mp4', 'mkv', 'avi'];
 const otherExtension = ['srt'];
 
@@ -15,7 +17,7 @@ const TEST_MOD = false;
 
 const URL = 'amqp://localhost';
 
-const API_URL = 'http://localhost:4242';
+const API_URL = 'http://localhost';
 
 const OTHER_DIR = '/var/www/public/download/other/';
 
@@ -33,9 +35,19 @@ const send_file_size = ({ btih, length }) =>
     method: 'POST',
     json: true,
     body: { length },
+    uri: `${API_URL}/video/${btih}/set/size`,
+    headers: { token: secret_key },
+  });
+
+const send_size_downloaded = ({ btih, length }) =>
+  request({
+    method: 'POST',
+    json: true,
+    body: { length },
     uri: `${API_URL}/video/${btih}/add/size`,
     headers: { token: secret_key },
   });
+
 
 const started = (engine, btih = 'test') => () => {
   let lock = false;
@@ -59,6 +71,12 @@ const started = (engine, btih = 'test') => () => {
     send_file_size({ btih, length: file.length });
     lock = true;
     const stream = file.createReadStream();
+    var downloaded = 0;
+    stream.on('data', function(chunk){
+      downloaded += chunk.length;
+      send_size_downloaded({ btih, length: downloaded });
+    })
+ 
     new Transcoder(stream)
       .maxSize(320, 240)
       .videoCodec('h264')

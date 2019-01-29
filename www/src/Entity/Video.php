@@ -64,6 +64,11 @@ class Video
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
+    private $bytes;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
     private $downloadBytesDone;
 
     /**
@@ -116,6 +121,18 @@ class Video
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="video", orphanRemoval=true)
      */
     private $comments;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $downloadable;
+
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $processStarted;
+
 
     public function __construct()
     {
@@ -403,6 +420,42 @@ class Video
                 $comment->setVideo(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBytes(): ?int
+    {
+        return $this->bytes;
+    }
+
+    public function setBytes(?int $bytes): self
+    {
+        $this->bytes = $bytes;
+
+        return $this;
+    }
+
+    public function getDownloadable()
+    {
+        return $this->downloadable;
+    }
+
+    public function setDownloadable($downloadable): self
+    {
+        $this->downloadable = $downloadable;
+
+        return $this;
+    }
+
+    public function getProcessStarted()
+    {
+        return $this->processStarted;
+    }
+
+    public function setProcessStarted($processStarted): self
+    {
+        $this->processStarted = $processStarted;
 
         return $this;
     }

@@ -72,6 +72,9 @@ class SearchTorrentManager
                 
             }
             $video->setTorrentUrl('http://www.legittorrents.info/download.php?id='.$video->getBtih().'&f=osef.torrent');
+            $video->setDownloadable(false)
+                ->setProcessStarted(false)
+                ;
             $videos[] = $video;
         }
         return $videos;
@@ -104,6 +107,8 @@ class SearchTorrentManager
                 ->setDescription($data['description'] ?? '')
                 ->setBtih($data['btih'])
                 ->setSource(1)
+                ->setDownloadable(false)
+                ->setProcessStarted(false)
                 ;
             $videos[] = $video;
         }    
@@ -152,10 +157,12 @@ class SearchTorrentManager
                 ->setTitle($data['title'])
                 ->setDescription($data['description_full'] ?? '')
                 ->setProductionDate(\DateTime::createFromFormat('Y-m-d H:i:s', $data['year'].'-01-01 00:00:00'))
-                ->setDuration($data['runtime'])
+                ->setDuration($data['runtime'] * 60)
                 ->setPictureUrl($data['medium_cover_image'])
                 ->setNotation($data['rating'])
                 ->setSource(1)
+                ->setDownloadable(false)
+                ->setProcessStarted(false)
                 ;
             $videos[] = $video;
         }
