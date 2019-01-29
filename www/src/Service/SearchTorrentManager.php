@@ -8,12 +8,69 @@ use App\Entity\Video;
 
 class SearchTorrentManager
 {
-    public function search($search)
+    public function search($search, $page = 1)
     {
         $videos =  array_merge($this->searchYTSam($search), $this->searchLegitTorrent($search), $this->searchArchiveOrg($search));
-        // la tu filtres em fonction de $search
 
-        return $videos;
+        usort($videos, function($a, $b) use ($search){
+            $val = 0;
+            if ('title' === $search->getSortBy())
+            {
+                $val = strcmp($a->getTitle(), $b->getTitle());
+            }
+            if ('year' === $search->getSortBy())
+            {
+                $valA = $a->getProductionDate() ? $a->getProductionDate()->getTimestamp() : 0;
+                $valB = $b->getProductionDate() ? $b->getProductionDate()->getTimestamp() : 0;
+                $val = $valA - $valB;
+            }
+            if ('rating' === $search->getSortBy())
+            {
+                $val = $a->getNotation() - $b->getNotation();
+            }
+            if ('peers' === $search->getSortBy())
+            {
+
+            }
+            if ('seeds' === $search->getSortBy())
+            {
+
+            }
+            if ('download_count' === $search->getSortBy())
+            {
+
+            }
+            if ('like_count' === $search->getSortBy())
+            {
+
+            }
+            if ('date_added' === $search->getSortBy())
+            {
+
+            }
+            
+            if ('desc' == $search->getOrderBy())
+            {
+                $val = 0 - $val;
+            }
+            return $val;
+        });
+
+        $i = 0;
+        $newVideos = [];
+        $start = $page * 10;
+        $stop = $start + 10;
+        foreach ($videos as $video) {
+            if ($i >= $start && $i < $stop)
+            {
+                $newVideos[] = $video;
+            }
+            $i++;
+        }
+
+
+
+        return $newVideos;
     }
 
     public function searchLegitTorrent($search)

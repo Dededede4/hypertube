@@ -102,11 +102,6 @@ class Video
     private $lastSeeAt;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $subtitle;
-
-    /**
      * @ORM\Id()
      * @ORM\Column(type="string", length=255, unique=true)
      */
@@ -121,6 +116,11 @@ class Video
      * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="video", orphanRemoval=true)
      */
     private $comments;
+
+     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Subtitle", mappedBy="video", orphanRemoval=true)
+     */
+    private $subtitles;
 
     /**
      * @ORM\Column(type="boolean")
@@ -137,6 +137,7 @@ class Video
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->subtitles = new ArrayCollection();
     }
 
     public function getTitle(): ?string
@@ -331,18 +332,6 @@ class Video
         return $this;
     }
 
-    public function getSubtitle(): ?string
-    {
-        return $this->subtitle;
-    }
-
-    public function setSubtitle(?string $subtitle): self
-    {
-        $this->subtitle = $subtitle;
-
-        return $this;
-    }
-
     public function getBtih(): ?string
     {
         return $this->btih;
@@ -456,6 +445,37 @@ class Video
     public function setProcessStarted($processStarted): self
     {
         $this->processStarted = $processStarted;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Subtitle[]
+     */
+    public function getSubtitles(): Collection
+    {
+        return $this->subtitles;
+    }
+
+    public function addSubtitle(Subtitle $subtitle): self
+    {
+        if (!$this->subtitles->contains($subtitle)) {
+            $this->subtitles[] = $subtitle;
+            $subtitle->setVideo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubtitle(Subtitle $subtitle): self
+    {
+        if ($this->subtitles->contains($subtitle)) {
+            $this->subtitles->removeElement($subtitle);
+            // set the owning side to null (unless already changed)
+            if ($subtitle->getVideo() === $this) {
+                $subtitle->setVideo(null);
+            }
+        }
 
         return $this;
     }
