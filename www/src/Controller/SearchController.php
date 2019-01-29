@@ -59,11 +59,17 @@ class SearchController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            $videos = $this->searchAndFlush($search);
-            return $this->render(
-                'Search/index.html.twig',
-                ['videos' => $videos, 'form' => $form->createView()]
-            );
+            
+            if($request->isXmlHttpRequest())
+            {
+                $page = $request->get('page');
+                if (!ctype_digit($page))
+                    $page = 0;
+                $videos = $this->searchAndFlush($search, $page);
+                return $this->render(
+                'Search/results.html.twig',
+                ['videos' => $videos, 'form' => $form->createView()]);
+            }
         }
 
         return $this->render(
@@ -72,9 +78,9 @@ class SearchController extends AbstractController
         );
     }
 
-    private function searchAndFlush($query)
+    private function searchAndFlush($query, $page)
     {
-        $videos = $this->searchTorrentManager->search($query);
+        $videos = $this->searchTorrentManager->search($query, $page);
 
         $entityManager = $this->getDoctrine()->getManager();
         foreach ($videos as $video) {

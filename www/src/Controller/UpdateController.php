@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Video;
+use App\Entity\Subtitle;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,8 +17,20 @@ class UpdateController extends AbstractController
     /**
      * @Route("/video/{video}/add/subtitle", name="addsubtitle")
      */
-    public function downloadAction(Video $video)
+    public function downloadAction(Video $video, Request $request)
     {
+    	$val = json_decode($request->getContent(), true);
+    	$entityManager = $this->getDoctrine()->getManager();
+    	foreach ($val['names'] as $name) {
+    		$subtitle = new Subtitle();
+    		$subtitle->setVideo($video)
+    				->setText($name)
+    				->setCreatedAt(new \DateTime())
+    				;
+    		$entityManager->persist($subtitle);
+    	}
+
+        $entityManager->flush();
     	return new Response();
     }
 

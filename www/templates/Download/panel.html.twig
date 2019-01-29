@@ -2,7 +2,11 @@
 
 {% block body %}
 	
-		<video autoplay muted controls poster="{{ video.pictureUrl }}" src="{{ path('stream', {'video' : video.btih}) }}" style="width: 100%; height:56.25vw;"></video>
+		<video autoplay muted controls poster="{{ video.pictureUrl }}" src="{{ path('stream', {'video' : video.btih}) }}" style="width: 100%; height:56.25vw;">
+        {% for subtitle in video.subtitles %}
+            <track label="{{ subtitle.text }}" kind="subtitles" src="{{ asset('/download/other/' ~ video.btih ~ '/' ~ subtitle.text) }}">
+        {% endfor %}
+        </video>
 	<div class="container">
 		<h2>{{ video.title }}</h2>
 		<p>{{ video.description }}</p>

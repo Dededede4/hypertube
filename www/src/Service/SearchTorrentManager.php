@@ -8,12 +8,69 @@ use App\Entity\Video;
 
 class SearchTorrentManager
 {
-    public function search($search)
+    public function search($search, $page)
     {
         $videos =  array_merge($this->searchYTSam($search), $this->searchLegitTorrent($search), $this->searchArchiveOrg($search));
-        // la tu filtres em fonction de $search
 
-        return $videos;
+        usort($videos, function($a, $b) use ($search){
+            $val = 0;
+            if ('title' === $search->getSortBy())
+            {
+                $val = strcmp($a->getTitle(), $b->getTitle());
+            }
+            if ('year' === $search->getSortBy())
+            {
+                $valA = $a->getProductionDate() ? $a->getProductionDate()->getTimestamp() : 0;
+                $valB = $b->getProductionDate() ? $b->getProductionDate()->getTimestamp() : 0;
+                $val = $valA - $valB;
+            }
+            if ('rating' === $search->getSortBy())
+            {
+                $val = $a->getNotation() - $b->getNotation();
+            }
+            if ('peers' === $search->getSortBy())
+            {
+                $val = $a->getNbSeeder() - $b->getNbSeeder();
+            }
+            if ('seeds' === $search->getSortBy())
+            {
+                $val = $a->getNbSeeder() - $b->getNbSeeder();
+            }
+            if ('download_count' === $search->getSortBy())
+            {
+                $val = $a->getNbLeecher() - $b->getNbLeecher();
+            }
+            if ('like_count' === $search->getSortBy())
+            {
+                $val = $a->getNotation() - $b->getNotation();
+            }
+            if ('date_added' === $search->getSortBy())
+            {
+                $val = $a->getProductionDate() - $b->getProductionDate();
+            }
+            
+            if ('desc' == $search->getOrderBy())
+            {
+                $val = 0 - $val;
+            }
+            return $val;
+        });
+
+        $i = 0;
+        $newVideos = [];
+        $start = $page * 10;
+        $stop = $start + 10;
+        foreach ($videos as $video) {
+            if ($i >= $start && $i < $stop)
+            {
+                $newVideos[] = $video;
+            }
+            $i++;
+        }
+
+
+
+        return $newVideos;
     }
 
     public function searchLegitTorrent($search)
@@ -93,6 +150,8 @@ class SearchTorrentManager
         // die;
 
         $videos = [];
+        if ($datas === null)
+            return $videos;
         foreach ($datas as $data) {
             if(empty($data['btih']))
                 continue;
